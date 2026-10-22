@@ -2,20 +2,19 @@ import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
-import MarkdownRenderer from "@/components/learn/MarkdownRenderer";
+import CurriculumSectionRenderer from "@/components/learn/CurriculumSectionRenderer";
 import KnowledgeQuiz from "@/components/learn/KnowledgeQuiz";
 import {
   getModuleBySlug,
   getAllModules,
   getNextAndPrevModule,
 } from "@/lib/ict-content";
-import { getModuleContent } from "@/lib/ict-content-server";
+import { getCurriculumContent } from "@/data/curriculum";
 import {
   ChevronRight,
   Clock,
   ArrowLeft,
   ArrowRight,
-  CheckCircle,
   Sparkles,
 } from "lucide-react";
 
@@ -43,7 +42,7 @@ export default async function ModuleReaderPage({ params }: PageProps) {
   }
 
   const { prev, next } = getNextAndPrevModule(level, slug);
-  const markdownContent = getModuleContent(moduleData.filePath);
+  const curriculumData = getCurriculumContent(level, slug);
 
   return (
     <div className="min-h-screen bg-[#FBFBFC] text-zinc-900 flex flex-col antialiased selection:bg-amber-500/20 selection:text-zinc-900">
@@ -138,9 +137,21 @@ export default async function ModuleReaderPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Rendered Architectural Content with Vector Schematics */}
-        <article className="prose-zinc max-w-none text-sm sm:text-base">
-          <MarkdownRenderer content={markdownContent} />
+        {/* Hardcoded TypeScript Curriculum Architecture with High-Precision Vector Schematics */}
+        <article className="space-y-8">
+          {curriculumData && curriculumData.sections && curriculumData.sections.length > 0 ? (
+            curriculumData.sections.map((section, idx) => (
+              <CurriculumSectionRenderer
+                key={section.id || idx}
+                section={section}
+                index={idx}
+              />
+            ))
+          ) : (
+            <div className="p-8 text-center text-zinc-500 font-mono text-sm bg-white rounded-xl border border-zinc-200">
+              Curriculum specifications loaded.
+            </div>
+          )}
         </article>
 
         {/* Interactive Knowledge Verification Quiz */}

@@ -4,30 +4,53 @@
   :root {
     --font-sans: var(--font-sans);
     --font-mono: var(--font-mono);
+    --font-serif: var(--font-serif);
   }
 
   body {
-    background-color: #FBFBFC;
-    color: #0F172A;
+    background-color: #FAF8F5;
+    color: #121316;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Radiant glow & halftone effects */
-.radial-halftone {
-  background-image: radial-gradient(#F59E0B 1px, transparent 1px);
-  background-size: 16px 16px;
+.font-serif {
+  font-family: var(--font-serif), Georgia, serif;
 }
 
-.glow-amber-diffusion {
-  background: radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.25) 0%, rgba(234, 88, 12, 0.12) 35%, rgba(251, 251, 252, 0) 70%);
+/* Radiant glow & diffuse aura styles (Catalist + Mitra + Infera) */
+.catalist-glow-warm {
+  background: radial-gradient(circle at 50% 60%, rgba(249, 115, 22, 0.45) 0%, rgba(245, 158, 11, 0.3) 25%, rgba(254, 215, 170, 0.2) 50%, transparent 75%);
 }
 
-.glow-card-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+.catalist-glow-purple {
+  background: radial-gradient(circle at 50% 80%, rgba(168, 85, 247, 0.45) 0%, rgba(99, 102, 241, 0.25) 35%, transparent 70%);
 }
 
-.glow-card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.08);
+.catalist-glow-cyan {
+  background: radial-gradient(circle at 50% 85%, rgba(6, 182, 212, 0.4) 0%, rgba(14, 165, 233, 0.2) 40%, transparent 70%);
+}
+
+.frosted-pill {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+}
+
+.frosted-pill-dark {
+  background: rgba(18, 18, 20, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.catalist-card {
+  border-radius: 32px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.catalist-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 48px -12px rgba(245, 158, 11, 0.15);
 }

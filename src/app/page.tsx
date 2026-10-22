@@ -25,17 +25,17 @@ export default function HomePage() {
       {/* -------------------------------------------------------------------- */}
       {/* 1. HERO SECTION: EDITORIAL HEADLINE + CLEAN AMBIENCE                 */}
       {/* -------------------------------------------------------------------- */}
-      <section className="relative pt-20 pb-20 md:pt-32 md:pb-28 overflow-hidden">
+      <section className="relative pt-16 pb-16 md:pt-24 md:pb-24 overflow-hidden">
         
-        {/* Soft, Diffuse Warm Glow (Mitra style) */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[560px] pointer-events-none opacity-80">
-          <div className="absolute inset-0 bg-radial-[circle_at_50%_20%] from-orange-400/20 via-amber-300/10 to-transparent blur-3xl" />
+        {/* Soft, Diffuse Warm Glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] pointer-events-none opacity-80">
+          <div className="absolute inset-0 bg-radial-[circle_at_50%_25%] from-orange-400/20 via-amber-300/10 to-transparent blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
           
-          {/* Master Headline: High-Status Editorial Serif + Modern Sans */}
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tight text-stone-950 leading-[1.03] max-w-4xl mx-auto">
+          {/* Master Headline: Confident Editorial Scale */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-stone-950 leading-[1.08] max-w-4xl mx-auto">
             Learn ICT Trading with{" "}
             <span className="font-serif italic font-normal text-amber-600">
               Interactive
@@ -43,16 +43,16 @@ export default function HomePage() {
             Practice.
           </h1>
 
-          {/* Subtitle: Crystal clear educational purpose */}
-          <p className="mt-6 text-lg sm:text-xl text-stone-600 max-w-2xl mx-auto font-normal leading-relaxed">
+          {/* Subtitle */}
+          <p className="mt-5 text-base sm:text-lg md:text-xl text-stone-600 max-w-2xl mx-auto font-normal leading-relaxed">
             The complete interactive tutorial platform for Inner Circle Trader concepts. Master liquidity sweeps, Fair Value Gaps, and execution models through 24 structured lessons and hands-on market drills.
           </p>
 
           {/* Call to Actions */}
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
             <Link
               href="/learn"
-              className="px-8 py-4 rounded-full bg-[#121316] hover:bg-stone-800 text-white font-semibold text-sm shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 flex items-center gap-2.5 group"
+              className="px-7 py-3.5 sm:px-8 sm:py-4 rounded-full bg-[#121316] hover:bg-stone-800 text-white font-semibold text-sm shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all hover:shadow-[0_8px_25px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 flex items-center gap-2.5 group"
             >
               <span>Start Learning (24 Tutorials)</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -60,15 +60,15 @@ export default function HomePage() {
 
             <Link
               href="/practice"
-              className="px-8 py-4 rounded-full bg-white hover:bg-stone-50 text-stone-900 font-semibold text-sm border border-stone-300/80 shadow-xs transition-all hover:border-stone-400 hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2"
+              className="px-7 py-3.5 sm:px-8 sm:py-4 rounded-full bg-white hover:bg-stone-50 text-stone-900 font-semibold text-sm border border-stone-300/90 shadow-xs transition-all hover:border-stone-400 hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2"
             >
               <span className="text-amber-500 text-base">✦</span>
               <span>Try Interactive Simulator</span>
             </Link>
           </div>
 
-          {/* Clean Human Trust Metrics Strip */}
-          <div className="mt-16 pt-8 border-t border-stone-200/70 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs font-mono text-stone-500">
+          {/* Clean Trust Metrics Strip */}
+          <div className="mt-12 pt-7 border-t border-stone-200/80 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs sm:text-sm font-mono text-stone-500">
             <span className="flex items-center gap-2">
               <span className="text-amber-600 font-bold">24</span> Step-by-Step Lessons
             </span>
@@ -112,7 +112,7 @@ export default function HomePage() {
             
             {/* Card 1: Liquidity Purge */}
             <Link
-              href="/learn/foundations/liquidity-and-order-flow"
+              href="/learn/foundations/liquidity-concepts"
               className="group relative rounded-[28px] bg-white border border-stone-200/90 p-8 flex flex-col justify-between overflow-hidden shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-amber-300"
             >
               <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-amber-500/12 via-orange-400/8 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -142,7 +142,7 @@ export default function HomePage() {
 
             {/* Card 2: Fair Value Gaps */}
             <Link
-              href="/learn/foundations/fair-value-gaps-and-imbalances"
+              href="/learn/foundations/imbalances-and-fvg"
               className="group relative rounded-[28px] bg-white border border-stone-200/90 p-8 flex flex-col justify-between overflow-hidden shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-amber-300"
             >
               <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-yellow-500/15 via-amber-400/8 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -262,7 +262,7 @@ export default function HomePage() {
 
             {/* Card 6: Execution Models */}
             <Link
-              href="/learn/models/silver-bullet"
+              href="/learn/execution-models/silver-bullet-strategy"
               className="group relative rounded-[28px] bg-white border border-stone-200/90 p-8 flex flex-col justify-between overflow-hidden shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-rose-300"
             >
               <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-rose-500/12 via-orange-400/8 to-transparent rounded-full blur-2xl pointer-events-none" />

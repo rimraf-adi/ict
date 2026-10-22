@@ -29,74 +29,85 @@ export default function HomePage() {
         
         {/* Celestial Horizon Planetary Arc & Stardust Atmosphere */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1500px] h-[720px] pointer-events-none select-none overflow-hidden">
+          
           {/* Deep Space Radial Halos Underneath */}
-          <div className="absolute -top-[160px] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-cyan-500/25 via-blue-600/15 to-transparent rounded-full blur-[120px]" />
-          <div className="absolute top-[80px] left-1/2 -translate-x-1/2 w-[650px] h-[300px] bg-sky-400/15 rounded-full blur-[80px]" />
+          <div className="absolute -top-[140px] left-1/2 -translate-x-1/2 w-[1100px] h-[480px] bg-gradient-to-b from-cyan-500/20 via-blue-600/12 to-transparent rounded-full blur-[130px]" />
+          <div className="absolute top-[60px] left-1/2 -translate-x-1/2 w-[600px] h-[260px] bg-sky-400/15 rounded-full blur-[75px]" />
 
-          {/* Subtle Vertical Atmospheric Light Shafts */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[850px] h-[420px] opacity-35 mix-blend-screen pointer-events-none">
-            <div className="absolute left-[15%] top-0 w-28 h-[360px] bg-gradient-to-b from-cyan-300/30 via-cyan-400/10 to-transparent blur-2xl transform -rotate-12" />
-            <div className="absolute left-[38%] top-0 w-36 h-[400px] bg-gradient-to-b from-sky-200/35 via-blue-400/10 to-transparent blur-2xl" />
-            <div className="absolute right-[18%] top-0 w-28 h-[360px] bg-gradient-to-b from-cyan-300/30 via-cyan-400/10 to-transparent blur-2xl transform rotate-12" />
+          {/* Vertical Atmospheric Light Shafts Ascending into Deep Space (NEONE style) */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[360px] opacity-25 pointer-events-none flex justify-center gap-14">
+            <div className="w-14 h-[320px] bg-gradient-to-t from-sky-400/35 via-cyan-300/15 to-transparent blur-xl" />
+            <div className="w-24 h-[360px] bg-gradient-to-t from-cyan-300/40 via-sky-200/20 to-transparent blur-2xl" />
+            <div className="w-16 h-[320px] bg-gradient-to-t from-blue-400/35 via-cyan-400/15 to-transparent blur-xl" />
           </div>
 
-          {/* Celestial Horizon Planetary Arch (Dome curvature framing headline, exactly like NEONE) */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] md:w-[1500px] h-[480px]">
-            <svg viewBox="0 0 1200 480" className="w-full h-full overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Celestial Horizon Planetary Arch (Exact circular arc curvature framing the text, NEONE style) */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] md:w-[1500px] h-[520px]">
+            <svg viewBox="0 0 1200 520" className="w-full h-full overflow-visible" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="neoneArcGrad" x1="0%" y1="100%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
-                  <stop offset="20%" stopColor="#38bdf8" stopOpacity="0.6" />
+                  <stop offset="0%" stopColor="#0284c7" stopOpacity="0" />
+                  <stop offset="15%" stopColor="#38bdf8" stopOpacity="0.45" />
+                  <stop offset="32%" stopColor="#7dd3fc" stopOpacity="0.85" />
+                  <stop offset="47%" stopColor="#ffffff" stopOpacity="1" />
                   <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
-                  <stop offset="80%" stopColor="#38bdf8" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+                  <stop offset="53%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="68%" stopColor="#7dd3fc" stopOpacity="0.85" />
+                  <stop offset="85%" stopColor="#38bdf8" stopOpacity="0.45" />
+                  <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
                 </linearGradient>
+                <radialGradient id="apexFlare" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                  <stop offset="25%" stopColor="#7dd3fc" stopOpacity="0.7" />
+                  <stop offset="55%" stopColor="#0284c7" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="#030712" stopOpacity="0" />
+                </radialGradient>
                 <filter id="neoneGlow" x="-20%" y="-40%" width="140%" height="200%">
                   <feGaussianBlur stdDeviation="8" result="blur1" />
-                  <feGaussianBlur stdDeviation="24" result="blur2" />
+                  <feGaussianBlur stdDeviation="22" result="blur2" />
                   <feMerge>
                     <feMergeNode in="blur2" />
                     <feMergeNode in="blur1" />
                     <feMergeNode in="SourceGraphic" />
                   </feMerge>
                 </filter>
-                <radialGradient id="neoneAura" cx="50%" cy="12%" r="65%">
-                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.32" />
-                  <stop offset="40%" stopColor="#2563eb" stopOpacity="0.14" />
+                <radialGradient id="neoneAura" cx="50%" cy="10%" r="65%">
+                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.28" />
+                  <stop offset="40%" stopColor="#2563eb" stopOpacity="0.10" />
                   <stop offset="100%" stopColor="#030712" stopOpacity="0" />
                 </radialGradient>
               </defs>
 
               {/* Radiant Atmosphere Aura behind the crest */}
-              <ellipse cx="600" cy="180" rx="550" ry="240" fill="url(#neoneAura)" />
+              <ellipse cx="600" cy="190" rx="560" ry="240" fill="url(#neoneAura)" />
 
               {/* Outer Deep Glow Arch */}
               <path
-                d="M -150 620 Q 600 -560 1350 620"
+                d="M -150 640 Q 600 -560 1350 640"
                 stroke="#38bdf8"
-                strokeWidth="22"
-                strokeOpacity="0.22"
+                strokeWidth="20"
+                strokeOpacity="0.20"
                 filter="url(#neoneGlow)"
               />
 
               {/* Mid Electric Blue Arch */}
               <path
-                d="M -150 620 Q 600 -560 1350 620"
+                d="M -150 640 Q 600 -560 1350 640"
                 stroke="#60a5fa"
-                strokeWidth="7"
+                strokeWidth="6"
                 strokeOpacity="0.55"
                 filter="url(#neoneGlow)"
               />
 
               {/* Core Razor-Sharp Luminous Rim */}
               <path
-                d="M -150 620 Q 600 -560 1350 620"
+                d="M -150 640 Q 600 -560 1350 640"
                 stroke="url(#neoneArcGrad)"
                 strokeWidth="2.5"
               />
 
-              {/* Intense Crest Light Burst */}
-              <ellipse cx="600" cy="22" rx="180" ry="8" fill="#ffffff" opacity="0.9" filter="url(#neoneGlow)" />
+              {/* Natural Apex Flare Burst (Seamless radial glow, no hard pill edge) */}
+              <circle cx="600" cy="24" r="60" fill="url(#apexFlare)" filter="url(#neoneGlow)" />
             </svg>
           </div>
 
@@ -119,41 +130,40 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
           
-          {/* Centered Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/25 bg-cyan-950/40 text-cyan-200 text-xs font-mono font-medium backdrop-blur-md shadow-[0_0_18px_rgba(6,182,212,0.18)] mb-6">
-            <span className="text-cyan-400">✦</span>
-            <span>24 Modules · Live Sessions</span>
+          {/* Centered Pill Badge (NEONE style) */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-950/40 text-cyan-200 text-xs font-mono font-medium backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.18)] mb-6">
+            <span className="text-cyan-400">✨</span>
+            <span>24 Structured Tutorials · Live Market Drills</span>
           </div>
 
-          {/* Master Headline: Confident, crisp sans typography */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto">
+          {/* Master Headline: Crisp Sans with Ice-Blue Glow (NEONE style) */}
+          <h1 className="text-4xl sm:text-6xl md:text-[68px] lg:text-[74px] font-extrabold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto">
             Master Order Flow With{" "}
-            <span className="bg-gradient-to-r from-white via-cyan-100 to-sky-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-sky-200 via-cyan-100 to-blue-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(56,189,248,0.35)]">
               Interactive Practice
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-5 text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-normal leading-relaxed">
-            The complete interactive tutorial platform for Inner Circle Trader concepts. Master liquidity sweeps, Fair Value Gaps, and execution models through 24 structured lessons and hands-on market drills.
+          <p className="mt-5 text-sm sm:text-base md:text-lg text-slate-400 max-w-xl mx-auto font-normal leading-relaxed">
+            The complete interactive tutorial platform for Inner Circle Trader concepts. Master liquidity sweeps, Fair Value Gaps, and execution models through structured lessons and hands-on drills.
           </p>
 
-          {/* Call to Actions (NEONE Solid White + Dark Glass Pills) */}
+          {/* Call to Actions (NEONE Solid White + Dark Glass with rounded-xl squircle borders) */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/learn"
-              className="px-8 py-3.5 rounded-full bg-white hover:bg-slate-100 text-slate-950 font-semibold text-sm shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all hover:scale-102 flex items-center gap-2.5 group"
+              className="px-7 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-950 font-semibold text-sm shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all hover:scale-102 flex items-center gap-2 group"
             >
-              <span>Start Learning (24 Tutorials)</span>
+              <span>Start Learning</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
 
             <Link
               href="/practice"
-              className="px-8 py-3.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/60 font-semibold text-sm transition-all hover:border-slate-500 hover:text-white flex items-center gap-2"
+              className="px-7 py-3.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-slate-200 hover:text-white font-medium text-sm border border-slate-700/60 shadow-xs transition-all hover:border-slate-500 backdrop-blur-md flex items-center gap-2"
             >
-              <span className="text-cyan-400 text-base">✦</span>
-              <span>Try Interactive Simulator</span>
+              <span>Try Simulator</span>
             </Link>
           </div>
 

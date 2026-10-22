@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import { 
@@ -13,216 +13,39 @@ import {
   Layers, 
   BookOpen,
   TrendingUp,
-  TrendingDown,
   Activity,
-  Zap,
-  HelpCircle
+  Zap
 } from "lucide-react";
 
-interface WorkstationScenario {
-  id: string;
-  name: string;
-  asset: string;
-  session: string;
-  timeframe: string;
-  activeMacro: string;
-  dealingRange: string;
-  htfBias: string;
-  keyLevel: string;
-  sweepDetail: string;
-  displacementDetail: string;
-  entryDetail: string;
-  rrMultiple: string;
-  question: string;
-  options: {
-    label: string;
-    isCorrect: boolean;
-    explanation: string;
-  }[];
-}
-
-const WORKSTATION_SCENARIOS: WorkstationScenario[] = [
-  {
-    id: "judas",
-    name: "01 / London Judas Swing",
-    asset: "EUR/USD",
-    session: "London Open Killzone (02:00 – 05:00 EST)",
-    timeframe: "M5",
-    activeMacro: "02:15 AM London Purge",
-    dealingRange: "1.0820 — 1.0890",
-    htfBias: "Bearish into Daily FVG",
-    keyLevel: "Asian High (1.08820) Swept",
-    sweepDetail: "Asian High purged by 14 pips during 02:00 open, hunting buy stops into 1H Bearish FVG.",
-    displacementDetail: "Immediate 5m Market Structure Shift (MSS) lower with three heavy red bodies.",
-    entryDetail: "Retracement taps Consequent Encroachment (50%) of 5m BISI at 1.08740.",
-    rrMultiple: "+3.2R",
-    question: "Price has wicked above the Asian Range High and violently closed lower with a displacement FVG. What is the institutional execution rule?",
-    options: [
-      {
-        label: "Wait for retracement into the 5m FVG (CE 50%), then enter short targeting Asian Low",
-        isCorrect: true,
-        explanation: "Correct! The Judas Swing purges liquidity to accumulate shorts. You enter at the discount/premium array (FVG 50%) targeting opposing sell-side liquidity."
-      },
-      {
-        label: "Buy the breakout because price broke above the Asian High resistance",
-        isCorrect: false,
-        explanation: "Incorrect. Buying breakouts at session opens is retail trap behavior. Smart money uses breakout buy-stops as counterparty liquidity."
-      },
-      {
-        label: "Enter short immediately with market order without waiting for retracement",
-        isCorrect: false,
-        explanation: "Incorrect. Entering without waiting for PD Array retracement degrades Risk:Reward and violates ICT entry discipline."
-      }
-    ]
-  },
-  {
-    id: "silver-bullet",
-    name: "02 / NY Silver Bullet",
-    asset: "NQ 100 Futures",
-    session: "NY AM Session (10:00 – 11:00 EST)",
-    timeframe: "M1",
-    activeMacro: "10:00 AM Economic Release Macro",
-    dealingRange: "19,480 — 19,620",
-    htfBias: "Bullish to Daily Buy-Side Liquidity",
-    keyLevel: "Equal Lows Swept at 10:03 AM",
-    sweepDetail: "Sell-side liquidity pool beneath morning equal lows purged immediately following 10:00 AM.",
-    displacementDetail: "1-minute violent displacement candle expanding +28 handles with clean FVG.",
-    entryDetail: "Limit buy filled at Fair Value Gap low (19,530.00), invalidation below swing low.",
-    rrMultiple: "+2.5R (15 Handles)",
-    question: "The 10:00 AM macro purges equal lows and leaves an energetic 1m Fair Value Gap. What is the Silver Bullet target?",
-    options: [
-      {
-        label: "Target 10–15 handles minimum into the opposing buy-side liquidity pool",
-        isCorrect: true,
-        explanation: "Correct! The NY Silver Bullet is designed for a mechanical 10 to 15 index handles (or 15–20 pips in FX) during the 10:00–11:00 AM delivery window."
-      },
-      {
-        label: "Hold indefinitely expecting a multi-day trend reversal",
-        isCorrect: false,
-        explanation: "Incorrect. The Silver Bullet is a session scalping model designed to capture liquidity delivery into the opposing pool, not multi-day swings."
-      },
-      {
-        label: "Wait until 11:30 AM to enter when the London close begins",
-        isCorrect: false,
-        explanation: "Incorrect. The Silver Bullet delivery window closes at 11:00 AM EST. Executing outside the window introduces chop and low probability."
-      }
-    ]
-  },
-  {
-    id: "smt",
-    name: "03 / SMT Divergence",
-    asset: "ES 500 vs NQ 100",
-    session: "NY AM Killzone (09:30 – 11:00 EST)",
-    timeframe: "M5",
-    activeMacro: "09:50 AM Macro Window",
-    dealingRange: "Correlated Asset Divergence",
-    htfBias: "Smart Money Accumulation",
-    keyLevel: "ES Lower Low vs NQ Higher Low",
-    sweepDetail: "ES 500 makes a lower low purging sell stops, while NQ 100 refuses to confirm and makes a higher low.",
-    displacementDetail: "Non-confirmation indicates institutional accumulation in the stronger asset (NQ).",
-    entryDetail: "Long entry on NQ at Inversion FVG retest targeting previous day high.",
-    rrMultiple: "+3.8R",
-    question: "ES makes a lower low while NQ forms a higher low at the morning liquidity level. What does this SMT divergence signal?",
-    options: [
-      {
-        label: "Smart Money is actively accumulating longs; buy the stronger asset (NQ) on FVG retest",
-        isCorrect: true,
-        explanation: "Correct! SMT Divergence between correlated assets reveals institutional crack in market correlation. The asset refusing to make a lower low is being accumulated."
-      },
-      {
-        label: "The market is broken and un-tradable until both assets match",
-        isCorrect: false,
-        explanation: "Incorrect. Non-confirmation between correlated indices is one of the highest-probability institutional footprints in ICT trading."
-      },
-      {
-        label: "Short the weaker asset (ES) aggressively",
-        isCorrect: false,
-        explanation: "Incorrect. When SMT bullish divergence forms, shorting into accumulation frequently leads to violent short-squeeze stops."
-      }
-    ]
-  },
-  {
-    id: "unicorn",
-    name: "04 / The Unicorn Model",
-    asset: "EUR/USD",
-    session: "London / NY Overlap (08:00 – 10:00 EST)",
-    timeframe: "M15",
-    activeMacro: "08:30 AM Economic News Macro",
-    dealingRange: "1.0800 — 1.0920",
-    htfBias: "Bearish Expansion into Weekly SSL",
-    keyLevel: "Breaker Block + Overlapping FVG",
-    sweepDetail: "High-probability confluence: Old swing high swept, breaking market structure lower.",
-    displacementDetail: "The failed swing low becomes a Bearish Breaker Block directly overlapping a fresh FVG.",
-    entryDetail: "Dual-confluence entry at the intersection of Breaker Block and Fair Value Gap.",
-    rrMultiple: "+4.1R",
-    question: "What makes the 'Unicorn' setup one of the highest-probability institutional patterns?",
-    options: [
-      {
-        label: "Dual confluence of a Breaker Block overlapping exactly with a Fair Value Gap",
-        isCorrect: true,
-        explanation: "Correct! The Unicorn model marries the mitigation of trapped traders in a Breaker Block with algorithmic rebalancing of a Fair Value Gap at the exact same price zone."
-      },
-      {
-        label: "It uses moving average crossovers combined with RSI divergence",
-        isCorrect: false,
-        explanation: "Incorrect. ICT concepts use zero retail indicators; the Unicorn is strictly price action, market structure, and liquidity-based."
-      },
-      {
-        label: "It only occurs once a month during NFP",
-        isCorrect: false,
-        explanation: "Incorrect. The Unicorn model forms weekly across major FX pairs and Index Futures during standard Killzones."
-      }
-    ]
-  }
-];
-
 export default function HomePage() {
-  const [activeScenarioId, setActiveScenarioId] = useState<string>("judas");
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(null);
-
-  const activeScenario = WORKSTATION_SCENARIOS.find(s => s.id === activeScenarioId) || WORKSTATION_SCENARIOS[0];
-
-  const handleSelectScenario = (id: string) => {
-    setActiveScenarioId(id);
-    setSelectedOptionIndex(null);
-  };
-
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-900 flex flex-col antialiased selection:bg-amber-500/25 selection:text-stone-950 overflow-x-hidden">
       <Navbar />
 
       {/* -------------------------------------------------------------------- */}
-      {/* 1. HERO SECTION: EDITORIAL HEADLINE + ANCHORED WORKSTATION FRAME     */}
+      {/* 1. HERO SECTION: EDITORIAL HEADLINE + CLEAN AMBIENCE                 */}
       {/* -------------------------------------------------------------------- */}
-      <section className="relative pt-16 pb-20 md:pt-24 md:pb-28 overflow-hidden">
+      <section className="relative pt-20 pb-20 md:pt-32 md:pb-28 overflow-hidden">
         
         {/* Soft, Diffuse Warm Glow (Mitra style) */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[560px] pointer-events-none opacity-80">
-          <div className="absolute inset-0 bg-radial-[circle_at_50%_15%] from-orange-400/20 via-amber-300/10 to-transparent blur-3xl" />
+          <div className="absolute inset-0 bg-radial-[circle_at_50%_20%] from-orange-400/20 via-amber-300/10 to-transparent blur-3xl" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
           
-          {/* Micro Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-stone-200/90 bg-white/80 shadow-[0_2px_10px_-2px_rgba(0,0,0,0.04)] backdrop-blur-md mb-8 transition-all hover:border-amber-300">
-            <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-            <span className="text-[12px] font-mono font-medium tracking-wide text-stone-700">
-              IPDA 3.0 · THE INTERBANK PRICE DELIVERY ALGORITHM
-            </span>
-          </div>
-
           {/* Master Headline: High-Status Editorial Serif + Modern Sans */}
           <h1 className="text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tight text-stone-950 leading-[1.03] max-w-4xl mx-auto">
-            Deconstruct the Signal Behind{" "}
+            Learn ICT Trading with{" "}
             <span className="font-serif italic font-normal text-amber-600">
-              Institutional
+              Interactive
             </span>{" "}
-            Order Flow.
+            Practice.
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle: Crystal clear educational purpose */}
           <p className="mt-6 text-lg sm:text-xl text-stone-600 max-w-2xl mx-auto font-normal leading-relaxed">
-            A systematic framework for trading liquidity sweeps, Fair Value Gaps, and 20-minute algorithmic delivery windows. Built for serious discretionary traders.
+            The complete interactive tutorial platform for Inner Circle Trader concepts. Master liquidity sweeps, Fair Value Gaps, and execution models through 24 structured lessons and hands-on market drills.
           </p>
 
           {/* Call to Actions */}
@@ -231,7 +54,7 @@ export default function HomePage() {
               href="/learn"
               className="px-8 py-4 rounded-full bg-[#121316] hover:bg-stone-800 text-white font-semibold text-sm shadow-[0_4px_20px_rgba(0,0,0,0.12)] transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 flex items-center gap-2.5 group"
             >
-              <span>Explore Curriculum</span>
+              <span>Start Learning (24 Tutorials)</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
 
@@ -240,210 +63,27 @@ export default function HomePage() {
               className="px-8 py-4 rounded-full bg-white hover:bg-stone-50 text-stone-900 font-semibold text-sm border border-stone-300/80 shadow-xs transition-all hover:border-stone-400 hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2"
             >
               <span className="text-amber-500 text-base">✦</span>
-              <span>Launch Practice Lab</span>
+              <span>Try Interactive Simulator</span>
             </Link>
           </div>
 
-          {/* ---------------------------------------------------------------- */}
-          {/* THE ANCHORED PRODUCT WORKSTATION (Linear + Mitra Craftsmanship) */}
-          {/* ---------------------------------------------------------------- */}
-          <div className="relative mt-16 w-full max-w-5xl mx-auto text-left">
-            
-            {/* Ambient warm backlight glow behind workstation */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-amber-500/15 rounded-[36px] blur-2xl opacity-75 pointer-events-none" />
-
-            <div className="relative rounded-[32px] border border-stone-200/90 bg-white/95 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.07)] backdrop-blur-md overflow-hidden">
-              
-              {/* Window Header Chrome */}
-              <div className="px-6 py-4 bg-stone-50/90 border-b border-stone-200/80 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-stone-300" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-stone-300" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-stone-300" />
-                  </div>
-                  <div className="h-4 w-[1px] bg-stone-200" />
-                  <span className="font-mono text-xs font-semibold text-stone-800 flex items-center gap-2">
-                    <span>{activeScenario.asset}</span>
-                    <span className="text-stone-400">·</span>
-                    <span className="text-stone-600">{activeScenario.session}</span>
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2 font-mono text-[11px] text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/80 font-semibold">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>ALGORITHMIC DELIVERY ACTIVE</span>
-                </div>
-              </div>
-
-              {/* Scenario Switcher Tabs */}
-              <div className="px-6 py-3 bg-stone-100/60 border-b border-stone-200/60 flex flex-wrap items-center gap-2 overflow-x-auto">
-                <span className="text-[11px] font-mono text-stone-400 font-bold uppercase mr-2 hidden sm:inline">
-                  Select Drill:
-                </span>
-                {WORKSTATION_SCENARIOS.map((scenario) => {
-                  const isActive = scenario.id === activeScenario.id;
-                  return (
-                    <button
-                      key={scenario.id}
-                      onClick={() => handleSelectScenario(scenario.id)}
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all ${
-                        isActive
-                          ? "bg-[#121316] text-white shadow-xs font-semibold"
-                          : "bg-white text-stone-600 border border-stone-200/80 hover:text-stone-950 hover:bg-stone-50"
-                      }`}
-                    >
-                      {scenario.name}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Workstation HUD Strip */}
-              <div className="px-6 py-3.5 bg-stone-50/50 border-b border-stone-200/60 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
-                <div>
-                  <span className="text-stone-400 block text-[10px] uppercase">Active Macro</span>
-                  <span className="font-bold text-amber-700">{activeScenario.activeMacro}</span>
-                </div>
-                <div>
-                  <span className="text-stone-400 block text-[10px] uppercase">Dealing Range</span>
-                  <span className="font-bold text-stone-800">{activeScenario.dealingRange}</span>
-                </div>
-                <div>
-                  <span className="text-stone-400 block text-[10px] uppercase">HTF Bias</span>
-                  <span className="font-bold text-stone-800">{activeScenario.htfBias}</span>
-                </div>
-                <div>
-                  <span className="text-stone-400 block text-[10px] uppercase">Key Benchmark</span>
-                  <span className="font-bold text-emerald-700">{activeScenario.keyLevel}</span>
-                </div>
-              </div>
-
-              {/* Workstation Inner Content: Two-Column Split */}
-              <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
-                {/* Left 5 Cols: Setup Anatomy Tape */}
-                <div className="lg:col-span-5 space-y-4">
-                  <div className="text-xs font-mono font-bold text-stone-400 uppercase tracking-wider">
-                    Institutional Footprint
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200/80">
-                      <div className="flex items-center gap-2 text-xs font-mono font-bold text-stone-900 mb-1">
-                        <span className="h-2 w-2 rounded-full bg-rose-500" />
-                        <span>01 / LIQUIDITY PURGE</span>
-                      </div>
-                      <p className="text-xs text-stone-600 leading-relaxed font-sans">
-                        {activeScenario.sweepDetail}
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200/80">
-                      <div className="flex items-center gap-2 text-xs font-mono font-bold text-stone-900 mb-1">
-                        <span className="h-2 w-2 rounded-full bg-amber-500" />
-                        <span>02 / DISPLACEMENT MSS</span>
-                      </div>
-                      <p className="text-xs text-stone-600 leading-relaxed font-sans">
-                        {activeScenario.displacementDetail}
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200/80">
-                      <div className="flex items-center gap-2 text-xs font-mono font-bold text-stone-900 mb-1">
-                        <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                        <span>03 / PD ARRAY RETEST</span>
-                      </div>
-                      <p className="text-xs text-stone-600 leading-relaxed font-sans">
-                        {activeScenario.entryDetail}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200/80 flex items-center justify-between font-mono text-xs text-amber-900">
-                    <span>Projected Target:</span>
-                    <span className="font-bold text-emerald-700 bg-white px-2 py-0.5 rounded border border-emerald-200">
-                      {activeScenario.rrMultiple}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Right 7 Cols: Interactive Decision Checkpoint Preview */}
-                <div className="lg:col-span-7 rounded-2xl border border-stone-200 bg-[#FAF9F6] p-6 flex flex-col justify-between h-full">
-                  <div>
-                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-stone-200/70">
-                      <span className="text-xs font-mono font-bold text-stone-700 flex items-center gap-2">
-                        <HelpCircle className="h-4 w-4 text-amber-600" />
-                        <span>INTERACTIVE DECISION DRILL</span>
-                      </span>
-                      <span className="text-[11px] font-mono text-stone-400">
-                        {selectedOptionIndex !== null ? "Checked" : "1 Checkpoint Active"}
-                      </span>
-                    </div>
-
-                    <p className="text-sm font-semibold text-stone-900 mb-5 leading-snug font-sans">
-                      {activeScenario.question}
-                    </p>
-
-                    <div className="space-y-2.5">
-                      {activeScenario.options.map((option, idx) => {
-                        const isSelected = selectedOptionIndex === idx;
-                        return (
-                          <div
-                            key={idx}
-                            onClick={() => setSelectedOptionIndex(idx)}
-                            className={`p-3.5 rounded-xl border text-xs font-sans cursor-pointer transition-all ${
-                              isSelected
-                                ? option.isCorrect
-                                  ? "bg-emerald-50 border-emerald-400 text-emerald-950 ring-1 ring-emerald-400"
-                                  : "bg-rose-50 border-rose-400 text-rose-950 ring-1 ring-rose-400"
-                                : "bg-white border-stone-200 text-stone-700 hover:border-stone-300 hover:bg-stone-50"
-                            }`}
-                          >
-                            <div className="flex items-start gap-3">
-                              <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold shrink-0 mt-0.5 ${
-                                isSelected
-                                  ? option.isCorrect
-                                    ? "bg-emerald-600 text-white"
-                                    : "bg-rose-600 text-white"
-                                  : "bg-stone-100 text-stone-600"
-                              }`}>
-                                {String.fromCharCode(65 + idx)}
-                              </span>
-                              <span className="leading-relaxed flex-1">
-                                {option.label}
-                              </span>
-                            </div>
-
-                            {isSelected && (
-                              <div className="mt-2.5 pt-2.5 border-t border-current/20 text-[11px] font-mono leading-normal">
-                                {option.explanation}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-stone-200/80 flex items-center justify-between">
-                    <span className="text-xs text-stone-500 font-sans">
-                      Test all scenarios step-by-step:
-                    </span>
-                    <Link
-                      href="/practice"
-                      className="px-4 py-2 rounded-full bg-[#121316] hover:bg-stone-800 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs"
-                    >
-                      <span>Play in Practice Lab</span>
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-
+          {/* Clean Human Trust Metrics Strip */}
+          <div className="mt-16 pt-8 border-t border-stone-200/70 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs font-mono text-stone-500">
+            <span className="flex items-center gap-2">
+              <span className="text-amber-600 font-bold">24</span> Step-by-Step Lessons
+            </span>
+            <span className="text-stone-300">·</span>
+            <span className="flex items-center gap-2">
+              <span className="text-amber-600 font-bold">4</span> Hands-On Drills
+            </span>
+            <span className="text-stone-300">·</span>
+            <span className="flex items-center gap-2">
+              <span className="text-amber-600 font-bold">6-Gate</span> Trade Checklist
+            </span>
+            <span className="text-stone-300">·</span>
+            <span className="flex items-center gap-2">
+              <span className="text-amber-600 font-bold">71</span> Term Lexicon
+            </span>
           </div>
 
         </div>

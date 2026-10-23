@@ -30,7 +30,7 @@ function formatInlineText(text: string): React.ReactNode {
     const boldMatch = remaining.match(/^\*\*(.*?)\*\*/);
     if (boldMatch) {
       parts.push(
-        <strong key={key++} className="font-bold text-zinc-900">
+        <strong key={key++} className="font-semibold text-white">
           {boldMatch[1]}
         </strong>
       );
@@ -44,7 +44,7 @@ function formatInlineText(text: string): React.ReactNode {
       parts.push(
         <code
           key={key++}
-          className="rounded-md bg-zinc-100 border border-zinc-200/80 px-1.5 py-0.5 font-mono text-xs text-zinc-800 font-semibold"
+          className="rounded-md bg-white/[0.06] border border-white/10 px-1.5 py-0.5 font-mono text-xs text-amber-300 font-semibold"
         >
           {codeMatch[1]}
         </code>
@@ -75,14 +75,14 @@ export default function CurriculumSectionRenderer({
   index,
 }: CurriculumSectionRendererProps) {
   return (
-    <section className="space-y-6 pt-4 pb-2 border-b border-zinc-100 last:border-b-0">
+    <section className="space-y-6 pt-4 pb-2 border-b border-white/[0.06] last:border-b-0">
       {/* Section Header */}
       {section.title && section.title !== "Overview" && section.title !== "Introduction" && (
         <div className="flex items-center gap-3 pt-2">
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-zinc-900 text-white font-mono text-xs font-bold">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] border border-white/10 text-white font-mono text-xs font-bold">
             {index + 1}
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">
+          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-white">
             {section.title}
           </h2>
         </div>
@@ -90,14 +90,14 @@ export default function CurriculumSectionRenderer({
 
       {/* Paragraphs */}
       {section.paragraphs && section.paragraphs.length > 0 && (
-        <div className="space-y-3.5 text-sm sm:text-base leading-relaxed text-zinc-700 font-sans">
+        <div className="space-y-3.5 text-sm sm:text-base leading-relaxed text-white/70 font-sans">
           {section.paragraphs.map((p, pIdx) => {
             // Check if this is a math block
             if (p.startsWith("$$") && p.endsWith("$$")) {
               return (
                 <div
                   key={pIdx}
-                  className="my-4 p-4 rounded-xl bg-zinc-50 border border-zinc-200/80 font-mono text-xs sm:text-sm text-zinc-900 overflow-x-auto text-center"
+                  className="my-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] font-mono text-xs sm:text-sm text-white overflow-x-auto text-center"
                 >
                   {p.replace(/\$\$/g, "")}
                 </div>
@@ -111,21 +111,21 @@ export default function CurriculumSectionRenderer({
       {/* Callout Box */}
       {section.callout && (
         <div
-          className={`rounded-xl border p-4 sm:p-5 my-4 ${
+          className={`rounded-2xl border p-4 sm:p-5 my-4 ${
             section.callout.type === "warning"
-              ? "bg-rose-50/70 border-rose-200 text-rose-900"
+              ? "bg-rose-950/25 border-rose-500/30 text-rose-200"
               : section.callout.type === "rule"
-              ? "bg-amber-50/70 border-amber-200 text-amber-900"
+              ? "bg-amber-950/25 border-amber-500/30 text-amber-200"
               : section.callout.type === "tip"
-              ? "bg-purple-50/70 border-purple-200 text-purple-900"
-              : "bg-blue-50/70 border-blue-200 text-blue-900"
+              ? "bg-purple-950/25 border-purple-500/30 text-purple-200"
+              : "bg-cyan-950/25 border-cyan-500/30 text-cyan-200"
           }`}
         >
           <div className="flex items-center gap-2 mb-2 font-mono text-xs font-bold uppercase tracking-wider">
-            {section.callout.type === "warning" && <ShieldAlert className="h-4 w-4 text-rose-600" />}
-            {section.callout.type === "rule" && <Flame className="h-4 w-4 text-amber-600" />}
-            {section.callout.type === "tip" && <Lightbulb className="h-4 w-4 text-purple-600" />}
-            {section.callout.type === "institutional" && <Cpu className="h-4 w-4 text-blue-600" />}
+            {section.callout.type === "warning" && <ShieldAlert className="h-4 w-4 text-rose-400" />}
+            {section.callout.type === "rule" && <Flame className="h-4 w-4 text-amber-400" />}
+            {section.callout.type === "tip" && <Lightbulb className="h-4 w-4 text-purple-400" />}
+            {section.callout.type === "institutional" && <Cpu className="h-4 w-4 text-cyan-400" />}
             <span>{section.callout.title}</span>
           </div>
           <p className="text-sm sm:text-base leading-relaxed font-medium">
@@ -147,18 +147,18 @@ export default function CurriculumSectionRenderer({
 
       {/* Numbered Execution Steps */}
       {section.numberedSteps && section.numberedSteps.length > 0 && (
-        <div className="my-5 rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-xs font-bold font-mono text-zinc-700 uppercase tracking-wider pb-2 border-b border-zinc-100">
-            <Bookmark className="h-3.5 w-3.5 text-amber-500" />
+        <div className="my-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 sm:p-6 shadow-sm space-y-3">
+          <div className="flex items-center gap-2 text-xs font-bold font-mono text-white/70 uppercase tracking-wider pb-2 border-b border-white/[0.06]">
+            <Bookmark className="h-3.5 w-3.5 text-amber-400" />
             <span>Execution Protocol & Sequential Steps</span>
           </div>
           <ol className="space-y-3 pt-1">
             {section.numberedSteps.map((step, sIdx) => (
               <li key={sIdx} className="flex items-start gap-3">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-900 font-mono text-xs font-bold mt-0.5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-400/20 text-amber-300 font-mono text-xs font-bold mt-0.5">
                   {sIdx + 1}
                 </span>
-                <span className="text-sm sm:text-base text-zinc-700 leading-relaxed font-sans">
+                <span className="text-sm sm:text-base text-white/70 leading-relaxed font-sans">
                   {formatInlineText(step)}
                 </span>
               </li>
@@ -171,8 +171,8 @@ export default function CurriculumSectionRenderer({
       {section.bulletPoints && section.bulletPoints.length > 0 && (
         <div className="my-4 space-y-2.5">
           {section.bulletPoints.map((bp, bIdx) => (
-            <div key={bIdx} className="flex items-start gap-2.5 text-sm sm:text-base text-zinc-700">
-              <span className="text-amber-500 font-bold text-base leading-none mt-1">•</span>
+            <div key={bIdx} className="flex items-start gap-2.5 text-sm sm:text-base text-white/70">
+              <span className="text-amber-400 font-bold text-base leading-none mt-1">•</span>
               <div className="leading-relaxed font-sans">{formatInlineText(bp)}</div>
             </div>
           ))}
@@ -181,21 +181,21 @@ export default function CurriculumSectionRenderer({
 
       {/* Data Table */}
       {section.table && section.table.rows && section.table.rows.length > 0 && (
-        <div className="my-6 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+        <div className="my-6 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-zinc-200 bg-zinc-50 font-mono text-xs uppercase tracking-wider text-zinc-700">
+              <thead className="border-b border-white/[0.08] bg-white/[0.03] font-mono text-xs uppercase tracking-wider text-white/60">
                 <tr>
                   {section.table.headers.map((h, hIdx) => (
-                    <th key={hIdx} className="px-4 py-3 font-bold">
+                    <th key={hIdx} className="px-4 py-3 font-semibold text-white/80">
                       {formatInlineText(h)}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 text-zinc-700">
+              <tbody className="divide-y divide-white/[0.06] text-white/70">
                 {section.table.rows.map((row, rIdx) => (
-                  <tr key={rIdx} className="hover:bg-zinc-50/70 transition-colors">
+                  <tr key={rIdx} className="hover:bg-white/[0.02] transition-colors">
                     {row.map((cell, cIdx) => (
                       <td key={cIdx} className="px-4 py-3 text-xs sm:text-sm">
                         {formatInlineText(cell)}

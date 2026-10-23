@@ -95,33 +95,33 @@ export default function KnowledgeQuiz({
   };
 
   return (
-    <section className="mt-12 rounded-lg border border-zinc-200 bg-zinc-50 p-6 sm:p-8">
+    <section className="mt-12 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 sm:p-8 text-white">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-5">
         <div>
-          <div className="text-xs font-mono uppercase tracking-wider text-zinc-500">
+          <div className="text-xs font-mono uppercase tracking-wider text-white/40">
             Knowledge Verification
           </div>
-          <h3 className="mt-1 text-lg font-bold text-zinc-950">
+          <h3 className="mt-1 text-lg font-semibold text-white">
             Concept Check ({questions.length} Questions)
           </h3>
-          <p className="text-xs text-zinc-600 mt-0.5">
+          <p className="text-xs text-white/50 mt-0.5">
             Verify key mechanics before advancing to the next module.
           </p>
         </div>
 
         {/* Live Score Counter */}
         <div className="flex items-center gap-3">
-          <div className="rounded-md border border-zinc-200 bg-white px-3 py-1.5 font-mono text-center">
-            <div className="text-[10px] uppercase text-zinc-400">Score</div>
-            <div className="text-sm font-bold text-zinc-900">
+          <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 font-mono text-center">
+            <div className="text-[10px] uppercase text-white/40">Score</div>
+            <div className="text-sm font-bold text-white">
               {currentScore} / {questions.length}
             </div>
           </div>
           {allAnswered && (
             <button
               onClick={handleReset}
-              className="flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white hover:bg-zinc-100 px-2.5 py-1.5 text-xs text-zinc-700 transition-colors"
+              className="flex items-center gap-1.5 rounded-xl border border-white/[0.08] bg-white/[0.04] hover:bg-white/[0.08] px-3 py-1.5 text-xs text-white/70 hover:text-white transition-colors"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span>Retry</span>
@@ -140,14 +140,14 @@ export default function KnowledgeQuiz({
           return (
             <div
               key={q.id}
-              className="rounded-lg border border-zinc-200 bg-white p-5"
+              className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5"
             >
               {/* Question Header */}
               <div className="flex items-start gap-3">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-zinc-100 border border-zinc-200 font-mono text-xs font-semibold text-zinc-700">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white/[0.06] border border-white/10 font-mono text-xs font-semibold text-white/80">
                   {qIndex + 1}
                 </span>
-                <h4 className="text-sm font-semibold text-zinc-900 leading-snug">
+                <h4 className="text-sm font-medium text-white leading-snug">
                   {q.question}
                 </h4>
               </div>
@@ -159,17 +159,17 @@ export default function KnowledgeQuiz({
                   const isThisCorrect = optIndex === q.correctAnswer;
 
                   let buttonStyles =
-                    "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-800";
+                    "border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 text-white/80";
 
                   if (isAnswered) {
                     if (isThisCorrect) {
                       buttonStyles =
-                        "border-emerald-500 bg-emerald-50 text-emerald-950 font-medium ring-1 ring-emerald-500";
+                        "border-emerald-500/80 bg-emerald-950/40 text-emerald-200 font-semibold ring-1 ring-emerald-500/40";
                     } else if (isSelected) {
                       buttonStyles =
-                        "border-rose-400 bg-rose-50 text-rose-950 font-medium ring-1 ring-rose-400";
+                        "border-rose-500/80 bg-rose-950/40 text-rose-200 font-semibold ring-1 ring-rose-500/40";
                     } else {
-                      buttonStyles = "border-zinc-100 bg-zinc-50 text-zinc-400 opacity-60";
+                      buttonStyles = "border-white/[0.04] bg-white/[0.01] text-white/30 opacity-40";
                     }
                   }
 
@@ -178,9 +178,9 @@ export default function KnowledgeQuiz({
                       key={optIndex}
                       disabled={isAnswered}
                       onClick={() => handleSelectOption(qIndex, optIndex)}
-                      className={`flex items-start gap-2.5 rounded-md border p-3 text-left text-xs transition-colors ${buttonStyles}`}
+                      className={`flex items-start gap-2.5 rounded-xl border p-3 text-left text-xs transition-all ${buttonStyles}`}
                     >
-                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-zinc-300 bg-zinc-50 font-mono text-[10px] uppercase font-semibold text-zinc-600">
+                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded border border-white/15 bg-white/[0.05] font-mono text-[10px] uppercase font-semibold text-white/60">
                         {String.fromCharCode(65 + optIndex)}
                       </span>
                       <span className="leading-snug">{opt}</span>
@@ -192,26 +192,26 @@ export default function KnowledgeQuiz({
               {/* Explanation & Feedback */}
               {isAnswered && (
                 <div
-                  className={`mt-4 rounded-md border p-3.5 text-xs leading-relaxed ${
+                  className={`mt-4 rounded-xl border p-3.5 text-xs leading-relaxed ${
                     isCorrect
-                      ? "border-emerald-200 bg-emerald-50 text-emerald-900"
-                      : "border-rose-200 bg-rose-50 text-rose-900"
+                      ? "border-emerald-500/30 bg-emerald-950/30 text-emerald-300"
+                      : "border-rose-500/30 bg-rose-950/30 text-rose-300"
                   }`}
                 >
                   <div className="flex items-center gap-1.5 font-semibold mb-1">
                     {isCorrect ? (
                       <>
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                        <span className="text-emerald-700">Correct Understanding</span>
+                        <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                        <span className="text-emerald-300">Correct Understanding</span>
                       </>
                     ) : (
                       <>
-                        <XCircle className="h-4 w-4 text-rose-600" />
-                        <span className="text-rose-700">Incorrect Understanding</span>
+                        <XCircle className="h-4 w-4 text-rose-400" />
+                        <span className="text-rose-300">Incorrect Understanding</span>
                       </>
                     )}
                   </div>
-                  <p className="text-zinc-700">{q.explanation}</p>
+                  <p className="text-white/70">{q.explanation}</p>
                 </div>
               )}
             </div>
@@ -221,16 +221,16 @@ export default function KnowledgeQuiz({
 
       {/* Completion Banner */}
       {allAnswered && (
-        <div className="mt-6 rounded-lg border border-zinc-200 bg-white p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-6 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-center sm:text-left">
-            <div className="text-xs font-mono font-semibold uppercase text-zinc-500">
+            <div className="text-xs font-mono font-semibold uppercase text-white/40">
               {currentScore === questions.length
                 ? "Perfect Score"
                 : currentScore >= 2
                 ? "Verification Passed"
                 : "Review Recommended"}
             </div>
-            <p className="text-sm font-medium text-zinc-900 mt-0.5">
+            <p className="text-sm font-semibold text-white mt-0.5">
               You scored {currentScore} of {questions.length} correct on this module.
             </p>
           </div>
@@ -239,7 +239,7 @@ export default function KnowledgeQuiz({
             {nextModuleUrl ? (
               <Link
                 href={nextModuleUrl}
-                className="flex items-center gap-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 px-4 py-2 text-xs font-medium text-white transition-colors"
+                className="flex items-center gap-1.5 rounded-full bg-white hover:bg-zinc-200 px-4 py-2 text-xs font-semibold text-zinc-950 transition-colors shadow-sm"
               >
                 <span>Next Module</span>
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -247,7 +247,7 @@ export default function KnowledgeQuiz({
             ) : (
               <Link
                 href="/learn"
-                className="flex items-center gap-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 px-4 py-2 text-xs font-medium text-white transition-colors"
+                className="flex items-center gap-1.5 rounded-full bg-white hover:bg-zinc-200 px-4 py-2 text-xs font-semibold text-zinc-950 transition-colors shadow-sm"
               >
                 <span>Curriculum Overview</span>
                 <ArrowRight className="h-3.5 w-3.5" />

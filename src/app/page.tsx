@@ -3,711 +3,611 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
-import {
-  ArrowRight,
-  ChevronRight,
-  BookOpen,
-  Target,
-  Zap,
-  ShieldCheck,
-  TrendingUp,
-  Activity,
-  Check,
-  Play,
-  Clock,
-  BarChart3,
-  Crosshair,
-  Layers,
-} from "lucide-react";
+import { ArrowRight, Check, ChevronDown, BookOpen, Clock } from "lucide-react";
 
-/* ─────────────────────────────────────────────
-   Inline micro-chart: candlestick strip SVG
-───────────────────────────────────────────── */
-function MiniChart() {
+/* ─── Inline MiniChart ──────────────────────────────────── */
+function MiniChart({ theme = "dark" }: { theme?: "dark" | "light" }) {
+  const bg = theme === "dark" ? "#111214" : "#f8f7f5";
+  const grid = theme === "dark" ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)";
+  const textCol = theme === "dark" ? "#4b5563" : "#9ca3af";
   const candles = [
-    { x: 12,  o: 68, c: 52, h: 72, l: 48, bull: false },
-    { x: 30,  o: 55, c: 62, h: 66, l: 50, bull: true  },
-    { x: 48,  o: 60, c: 48, h: 64, l: 44, bull: false },
-    { x: 66,  o: 50, c: 38, h: 55, l: 34, bull: false },  // sweep candle
-    { x: 84,  o: 40, c: 52, h: 56, l: 36, bull: true  },  // reversal
-    { x: 102, o: 50, c: 62, h: 66, l: 48, bull: true  },
-    { x: 120, o: 60, c: 72, h: 76, l: 58, bull: true  },
-    { x: 138, o: 70, c: 80, h: 84, l: 68, bull: true  },
+    { x: 26,  o: 160, c: 140, h: 165, l: 135 },
+    { x: 58,  o: 142, c: 155, h: 160, l: 138 },
+    { x: 90,  o: 153, c: 138, h: 158, l: 132 },
+    { x: 122, o: 140, c: 122, h: 145, l: 118 }, // judas wick
+    { x: 154, o: 124, c: 138, h: 142, l: 120 }, // reversal
+    { x: 186, o: 136, c: 152, h: 156, l: 134 },
+    { x: 218, o: 150, c: 165, h: 169, l: 148 },
+    { x: 250, o: 163, c: 178, h: 182, l: 161 },
+    { x: 282, o: 176, c: 190, h: 194, l: 174 },
   ];
   return (
-    <svg viewBox="0 0 160 100" className="w-full h-full" fill="none">
-      {/* FVG box */}
-      <rect x="72" y="38" width="32" height="16" fill="#3b82f6" fillOpacity="0.12" />
-      <line x1="72" y1="46" x2="104" y2="46" stroke="#3b82f6" strokeWidth="0.8" strokeDasharray="2 2" />
-      {/* TP line */}
-      <line x1="102" y1="20" x2="155" y2="20" stroke="#10b981" strokeWidth="0.8" strokeDasharray="2 2" />
-      <text x="108" y="18" fontSize="6" fill="#10b981" fontFamily="monospace">+TP</text>
-      {/* SSL sweep level */}
-      <line x1="10" y1="80" x2="80" y2="80" stroke="#f43f5e" strokeWidth="0.8" strokeDasharray="2 2" />
-      <text x="12" y="78" fontSize="6" fill="#f43f5e" fontFamily="monospace">SSL</text>
-      {candles.map((c) => (
-        <g key={c.x}>
-          <line x1={c.x + 7} y1={c.h} x2={c.x + 7} y2={c.l} stroke={c.bull ? "#10b981" : "#f43f5e"} strokeWidth="1" />
-          <rect
-            x={c.x}
-            y={Math.min(c.o, c.c)}
-            width="14"
-            height={Math.abs(c.o - c.c) || 2}
-            rx="1.5"
-            fill={c.bull ? "#10b981" : "#f43f5e"}
-          />
-        </g>
+    <svg viewBox="0 0 340 220" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="340" height="220" fill={bg} rx="12" />
+      {/* Grid */}
+      {[60,100,140,180].map(y => (
+        <line key={y} x1="16" y1={y} x2="324" y2={y} stroke={grid} strokeWidth="1" />
       ))}
-      {/* Entry marker */}
-      <circle cx="89" cy="46" r="3" fill="#3b82f6" />
-      <circle cx="89" cy="46" r="5.5" stroke="#3b82f6" strokeWidth="0.8" opacity="0.5" />
+      {/* BSL sweep level */}
+      <line x1="20" y1="130" x2="160" y2="130" stroke="#f43f5e" strokeWidth="0.8" strokeDasharray="3 3" />
+      <text x="22" y="127" fontSize="8" fill="#f43f5e" fontFamily="monospace" opacity="0.8">BSL</text>
+      {/* FVG box */}
+      <rect x="144" y="130" width="50" height="22" fill="#3b82f6" fillOpacity="0.15" />
+      <line x1="144" y1="141" x2="194" y2="141" stroke="#3b82f6" strokeWidth="0.8" strokeDasharray="2 2" />
+      <text x="148" y="128" fontSize="7.5" fill="#60a5fa" fontFamily="monospace">FVG</text>
+      {/* TP */}
+      <line x1="194" y1="82" x2="324" y2="82" stroke="#10b981" strokeWidth="0.8" strokeDasharray="3 3" />
+      <text x="198" y="79" fontSize="7.5" fill="#10b981" fontFamily="monospace">TP +24p</text>
+      {/* Candles */}
+      {candles.map((c, i) => {
+        const bull = c.c > c.o;
+        const col = i === 3 ? "#f43f5e" : (bull ? "#10b981" : "#f43f5e");
+        return (
+          <g key={i}>
+            <line x1={c.x + 14} y1={c.h} x2={c.x + 14} y2={c.l} stroke={col} strokeWidth="1.2" />
+            <rect x={c.x} y={Math.min(c.o, c.c)} width="28" height={Math.max(Math.abs(c.o - c.c), 3)} rx="2" fill={col} />
+          </g>
+        );
+      })}
+      {/* Entry dot */}
+      <circle cx="168" cy="141" r="4" fill="#60a5fa" />
+      <circle cx="168" cy="141" r="8" stroke="#60a5fa" strokeWidth="1" opacity="0.4" />
+      {/* Price labels */}
+      <text x="296" y="135" fontSize="8" fill={textCol} fontFamily="monospace">1.0842</text>
+      <text x="296" y="85" fontSize="8" fill="#10b981" fontFamily="monospace">1.0866</text>
     </svg>
   );
 }
 
-/* ─────────────────────────────────────────────
-   OTE Fibonacci mini-strip
-───────────────────────────────────────────── */
-function OteStrip() {
-  const levels = [
-    { pct: 0,   label: "0.000", note: "Swing Low",   color: "#94a3b8" },
-    { pct: 30,  label: "0.500", note: "Equilibrium", color: "#64748b" },
-    { pct: 44,  label: "0.618", note: "Fib limit",   color: "#f59e0b" },
-    { pct: 51,  label: "0.705", note: "OTE Sweet",   color: "#f97316", highlight: true },
-    { pct: 58,  label: "0.790", note: "Deep OTE",    color: "#fb923c" },
-    { pct: 100, label: "1.000", note: "Invalidation",color: "#94a3b8" },
-  ];
-  return (
-    <div className="relative flex flex-col gap-0 w-full font-mono text-[10px]">
-      {levels.slice().reverse().map((l) => (
-        <div
-          key={l.label}
-          className={`flex items-center gap-2 py-1 px-2 rounded ${l.highlight ? "bg-orange-50 border border-orange-200" : ""}`}
-        >
-          <span className="w-10 text-right font-bold" style={{ color: l.color }}>{l.label}</span>
-          <div className="flex-1 h-px bg-stone-200 relative">
-            {l.highlight && <div className="absolute inset-y-0 left-0 w-full h-full bg-orange-300 opacity-30 rounded" />}
-          </div>
-          <span className={`text-[9px] ${l.highlight ? "text-orange-700 font-bold" : "text-stone-500"}`}>{l.note}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Session timeline strip
-───────────────────────────────────────────── */
-function SessionTimeline() {
-  const sessions = [
-    { name: "Asian", start: 0, end: 22, color: "#818cf8" },
-    { name: "London", start: 28, end: 46, color: "#34d399" },
-    { name: "NY AM", start: 51, end: 70, color: "#fbbf24" },
-    { name: "Silver Bullet", start: 70, end: 76, color: "#fb923c" },
-    { name: "NY PM", start: 82, end: 93, color: "#a78bfa" },
-  ];
-  return (
-    <div className="w-full space-y-2">
-      <div className="relative h-6 rounded-full bg-stone-100 overflow-hidden">
-        {sessions.map((s) => (
-          <div
-            key={s.name}
-            className="absolute top-0 h-full rounded-sm opacity-80"
-            style={{ left: `${s.start}%`, width: `${s.end - s.start}%`, background: s.color }}
-          />
-        ))}
-      </div>
-      <div className="flex items-center gap-3 flex-wrap">
-        {sessions.map((s) => (
-          <div key={s.name} className="flex items-center gap-1 text-[10px] font-mono text-stone-600">
-            <span className="h-2 w-2 rounded-full" style={{ background: s.color }} />
-            {s.name}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Homepage
-───────────────────────────────────────────── */
+/* ─── Main ───────────────────────────────────────────────── */
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const [openTier, setOpenTier] = useState<string>("foundations");
+
+  const curriculumTiers = [
+    {
+      id: "foundations",
+      tier: "01",
+      title: "Foundations",
+      subtitle: "Interbank Price Delivery & Liquidity Basics",
+      tag: "8 Lessons · 65 min",
+      color: "text-sky-400",
+      accentBg: "bg-sky-500/10 border-sky-500/20",
+      modules: [
+        { title: "Liquidity & Stop Hunts", slug: "liquidity-concepts", level: "foundations", time: "8 min", desc: "Buy-side & sell-side liquidity pools, engineered stops, and turtle soups." },
+        { title: "Fair Value Gaps (BISI & SIBI)", slug: "imbalances-and-fvg", level: "foundations", time: "8 min", desc: "3-candle algorithmic displacement voids and Consequent Encroachment (50%)." },
+        { title: "Market Structure (BOS & MSS)", slug: "market-structure", level: "foundations", time: "9 min", desc: "Fractal swing points, trend continuation vs market structure shift." },
+        { title: "Dealing Ranges & Equilibrium", slug: "dealing-ranges", level: "foundations", time: "7 min", desc: "50% equilibrium, discount zones for longs, and premium zones for shorts." },
+        { title: "Session Theory & Killzones", slug: "session-theory-and-killzones", level: "foundations", time: "8 min", desc: "Asian, London, and New York institutional timing and liquidity cycles." },
+        { title: "IPDA & 4-Stage Algorithm", slug: "ipda-and-pdra", level: "foundations", time: "9 min", desc: "Consolidation, Expansion, Retracement, Reversal 20/40/60 day lookback." },
+        { title: "Order Blocks & Breakers", slug: "order-blocks-and-breakers", level: "foundations", time: "8 min", desc: "High-probability institutional footprints and failed order block flips." },
+        { title: "Power of Three (AMD)", slug: "power-of-3", level: "foundations", time: "7 min", desc: "Accumulation, Judas Swing manipulation, and real algorithmic distribution." },
+      ]
+    },
+    {
+      id: "intermediate",
+      tier: "02",
+      title: "Intermediate",
+      subtitle: "Optimal Trade Entry & Timing Precision",
+      tag: "6 Lessons · 48 min",
+      color: "text-amber-400",
+      accentBg: "bg-amber-500/10 border-amber-500/20",
+      modules: [
+        { title: "Premium & Discount · OTE", slug: "premium-discount-and-ote", level: "intermediate", time: "9 min", desc: "The 0.705 Fibonacci sweet spot inside institutional dealing ranges." },
+        { title: "20-Min Algorithmic Macros", slug: "macro-windows", level: "intermediate", time: "8 min", desc: "Algorithmic execution windows throughout London and New York." },
+        { title: "Consequent Encroachment", slug: "consequent-encroachment", level: "intermediate", time: "7 min", desc: "50% midpoint of shadows, gaps, and institutional candles." },
+        { title: "Daily Profiles & Narrative", slug: "daily-profiles", level: "intermediate", time: "8 min", desc: "Classic Tuesday low/high of the week, London reversals, and continuation." },
+        { title: "Weekly Range Delivery", slug: "weekly-profiles", level: "intermediate", time: "8 min", desc: "Weekly expansion targets, Sunday gaps, and Friday settlement." },
+        { title: "Monthly IPDA Data Range", slug: "monthly-ipda", level: "intermediate", time: "8 min", desc: "20, 40, and 60 day institutional algorithmic reference ranges." },
+      ]
+    },
+    {
+      id: "advanced",
+      tier: "03",
+      title: "Advanced",
+      subtitle: "Multi-Asset Correlation & Institutional Blueprints",
+      tag: "5 Lessons · 42 min",
+      color: "text-purple-400",
+      accentBg: "bg-purple-500/10 border-purple-500/20",
+      modules: [
+        { title: "SMT Divergence", slug: "smt-divergence", level: "advanced", time: "9 min", desc: "Correlated cracks in ES/NQ, EUR/GBP exposing smart money accumulation." },
+        { title: "Inversion Fair Value Gap", slug: "inversion-fvg", level: "advanced", time: "8 min", desc: "Failed FVG zones flipping into supportive institutional order flow." },
+        { title: "The Unicorn Setup", slug: "the-unicorn-model", level: "advanced", time: "9 min", desc: "Double confluence: Breaker Block overlapping an active Fair Value Gap." },
+        { title: "Market Maker Models (MMSM / MMBM)", slug: "market-maker-models", level: "advanced", time: "8 min", desc: "Original consolidation, smart money reversal, and curve distribution." },
+        { title: "2022 ICT Blueprint", slug: "2022-mentorship-model", level: "advanced", time: "8 min", desc: "The complete step-by-step institutional intraday trade model." },
+      ]
+    },
+    {
+      id: "execution",
+      tier: "04",
+      title: "Execution Models",
+      subtitle: "Zero-Discretion Intraday Trade Blueprints",
+      tag: "3 Lessons · 28 min",
+      color: "text-emerald-400",
+      accentBg: "bg-emerald-500/10 border-emerald-500/20",
+      modules: [
+        { title: "NY Silver Bullet (10:00–11:00 AM)", slug: "silver-bullet-strategy", level: "execution-models", time: "9 min", desc: "The premier daily 15-handle algorithmic displacement setup." },
+        { title: "London Judas Swing Model", slug: "london-judas-swing", level: "execution-models", time: "9 min", desc: "Asian range high/low sweep followed by 5m displacement MSS." },
+        { title: "6-Gate Pre-Trade Protocol", slug: "six-gate-execution-protocol", level: "execution-models", time: "10 min", desc: "The mandatory institutional risk verification checklist." },
+      ]
+    },
+    {
+      id: "practice",
+      tier: "05",
+      title: "Practice Drills",
+      subtitle: "Hands-On Candlestick Replay Scenarios",
+      tag: "4 Live Drills",
+      color: "text-rose-400",
+      accentBg: "bg-rose-500/10 border-rose-500/20",
+      modules: [
+        { title: "EUR/USD London Judas Drill", slug: "judas-drill", level: "practice", time: "15 min", desc: "Live Asian high sweep into 1m FVG entry with real-time feedback." },
+        { title: "NQ 10:00 AM Silver Bullet Drill", slug: "silver-bullet-drill", level: "practice", time: "15 min", desc: "Execute the 10:00 AM macro liquidity raid with strict 1:3 R:R." },
+      ]
+    }
+  ];
+
+  const steps = [
+    {
+      label: "Understand Liquidity",
+      body: "Before price moves, the algorithm needs fuel. It finds that fuel in the stop orders of retail traders sitting above equal highs and below equal lows.",
+    },
+    {
+      label: "Identify the Setup",
+      body: "A valid setup requires a liquidity sweep, a market structure shift with displacement bodies, and a Fair Value Gap for precise entry — all inside an institutional session window.",
+    },
+    {
+      label: "Time the Entry",
+      body: "The 10:00 AM Silver Bullet, London Open macro, and NY AM killzone deliver 90% of high-probability setups. Outside these windows, probability collapses.",
+    },
+    {
+      label: "Execute & Hold",
+      body: "Entry at the 50% Consequent Encroachment of the FVG. Stop behind the displacement swing. Target the opposing liquidity pool. Minimum 1:2 R:R enforced before order submission.",
+    },
+  ];
 
   const concepts = [
-    {
-      icon: <Crosshair className="h-4 w-4" />,
-      label: "Liquidity Sweep",
-      desc: "Engineered raids on retail stop clusters before the real institutional expansion.",
-      color: "text-rose-600",
-      bg: "bg-rose-50",
-      border: "border-rose-200",
-      href: "/learn/foundations/liquidity-concepts",
-    },
-    {
-      icon: <BarChart3 className="h-4 w-4" />,
-      label: "Fair Value Gaps",
-      desc: "3-candle displacement voids that price revisits to fill institutional imbalances.",
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-      border: "border-blue-200",
-      href: "/learn/foundations/imbalances-and-fvg",
-    },
-    {
-      icon: <Clock className="h-4 w-4" />,
-      label: "20-Min Macros",
-      desc: "Precise algorithmic windows: London Open, NY AM, NY Silver Bullet 10:00–11:00.",
-      color: "text-amber-600",
-      bg: "bg-amber-50",
-      border: "border-amber-200",
-      href: "/killzones",
-    },
-    {
-      icon: <TrendingUp className="h-4 w-4" />,
-      label: "SMT Divergence",
-      desc: "Correlated pairs crack — one sets new extreme, the other fails. Smart money tells.",
-      color: "text-purple-600",
-      bg: "bg-purple-50",
-      border: "border-purple-200",
-      href: "/learn/advanced/smt-divergence",
-    },
-    {
-      icon: <Layers className="h-4 w-4" />,
-      label: "OTE Fibonacci",
-      desc: "0.705 institutional sweet spot for optimal retracement entries with asymmetric R:R.",
-      color: "text-orange-600",
-      bg: "bg-orange-50",
-      border: "border-orange-200",
-      href: "/learn/intermediate/premium-discount-and-ote",
-    },
-    {
-      icon: <ShieldCheck className="h-4 w-4" />,
-      label: "6-Gate Protocol",
-      desc: "Zero-discretion pre-trade checklist. All 6 gates must lock before execution.",
-      color: "text-emerald-600",
-      bg: "bg-emerald-50",
-      border: "border-emerald-200",
-      href: "/checklist",
-    },
-  ];
-
-  const howItWorks = [
-    {
-      step: "01",
-      title: "Study the Framework",
-      body: "Work through 24 structured modules — from Dealing Range fundamentals to execution model blueprints. Each lesson builds on the last with vector diagrams and key takeaways.",
-      cta: "Browse Curriculum →",
-      href: "/learn",
-    },
-    {
-      step: "02",
-      title: "Drill Each Concept",
-      body: "Use the interactive Practice Lab to replay institutional setups: London Judas Swing, NY Silver Bullet, SMT Divergence, and The Unicorn. Make trade decisions under realistic conditions.",
-      cta: "Open Practice Lab →",
-      href: "/practice",
-    },
-    {
-      step: "03",
-      title: "Execute with Discipline",
-      body: "Run every trade candidate through the 6-Gate pre-flight protocol. Timing, liquidity raid, MSS, FVG, discount pricing, and 1:2 minimum R:R — no gate skipped, ever.",
-      cta: "Launch Checklist →",
-      href: "/checklist",
-    },
-  ];
-
-  const gates = [
-    { gate: "01", label: "Institutional Timing", sub: "Active Killzone or 20-min Macro", ok: true },
-    { gate: "02", label: "Liquidity Pool Swept", sub: "Wick through Asian H/L, EQL, PDH", ok: true },
-    { gate: "03", label: "Displacement MSS", sub: "Full body close beyond swing point", ok: true },
-    { gate: "04", label: "Fair Value Gap Present", sub: "Clean 3-candle BISI or SIBI", ok: true },
-    { gate: "05", label: "Discount / Premium", sub: "Long < 50% EQ · Short > 50% EQ", ok: true },
-    { gate: "06", label: "Minimum 1:2 R:R", sub: "SL at swing extreme, TP at DOL", ok: true },
-  ];
-
-  const modules = [
-    { level: "Foundations", count: 8, color: "bg-sky-100 text-sky-800 border-sky-200", href: "/learn" },
-    { level: "Intermediate", count: 6, color: "bg-amber-100 text-amber-800 border-amber-200", href: "/learn" },
-    { level: "Advanced", count: 5, color: "bg-purple-100 text-purple-800 border-purple-200", href: "/learn" },
-    { level: "Execution Models", count: 3, color: "bg-emerald-100 text-emerald-800 border-emerald-200", href: "/learn" },
-    { level: "Practice Drills", count: 4, color: "bg-rose-100 text-rose-800 border-rose-200", href: "/practice" },
+    { abbr: "FVG", full: "Fair Value Gap", href: "/learn/foundations/imbalances-and-fvg" },
+    { abbr: "OTE", full: "0.705 Sweet Spot", href: "/learn/intermediate/premium-discount-and-ote" },
+    { abbr: "MSS", full: "Market Structure Shift", href: "/learn/foundations/market-structure" },
+    { abbr: "BSL/SSL", full: "Liquidity Pools", href: "/learn/foundations/liquidity-concepts" },
+    { abbr: "SMT", full: "Smart Money Tool", href: "/learn/advanced/smt-divergence" },
+    { abbr: "BOS", full: "Break of Structure", href: "/learn/foundations/market-structure" },
+    { abbr: "IPDA", full: "Algo Data Range", href: "/learn/foundations/ipda-and-pdra" },
+    { abbr: "Power of 3", full: "AMD Model", href: "/learn/advanced/power-of-3" },
   ];
 
   return (
-    <div className="min-h-screen bg-white text-stone-900 flex flex-col antialiased">
-      <Navbar />
+    <div className="bg-[#0c0d0f] text-white min-h-screen antialiased overflow-x-hidden">
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="border-b border-stone-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-0 py-4">
+      {/* ═══════════════════════════════════════════════════
+          HERO — Cinematic full-bleed atmospheric backdrop
+      ═══════════════════════════════════════════════════ */}
+      <section className="relative h-[780px] flex flex-col justify-between overflow-hidden">
+        <Navbar />
 
-            {/* Left: Copy */}
-            <div className="flex flex-col justify-center py-20 lg:py-28 lg:pr-16 border-r-0 lg:border-r border-stone-200">
-              <div className="mb-6 inline-flex">
-                <span className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-stone-500 border border-stone-200 rounded-full px-3 py-1 bg-stone-50">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  24 Structured Modules · ICT Core
-                </span>
-              </div>
-
-              <h1 className="text-5xl sm:text-6xl lg:text-[68px] font-black tracking-tighter text-stone-950 leading-[0.95] mb-6">
-                Learn to trade<br />
-                <span className="text-stone-400">like institutions.</span>
-              </h1>
-
-              <p className="text-lg text-stone-500 leading-relaxed max-w-lg mb-10">
-                An interactive curriculum for Inner Circle Trader methodology.
-                Master liquidity, Fair Value Gaps, and execution models through
-                structured lessons and hands-on drills — not theory alone.
-              </p>
-
-              <div className="flex flex-wrap gap-3 mb-14">
-                <Link
-                  href="/learn"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-stone-950 text-white text-sm font-semibold hover:bg-stone-800 transition-colors shadow-sm"
-                >
-                  Start Learning
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/practice"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-stone-700 text-sm font-medium border border-stone-200 hover:bg-stone-50 hover:border-stone-300 transition-colors"
-                >
-                  <Play className="h-4 w-4" />
-                  Try Practice Lab
-                </Link>
-              </div>
-
-              {/* Proof strip */}
-              <div className="flex flex-wrap items-center gap-6 pt-8 border-t border-stone-100">
-                {[
-                  { n: "24", label: "Lessons" },
-                  { n: "4", label: "Live Drills" },
-                  { n: "71", label: "Term Lexicon" },
-                  { n: "1:3+", label: "Avg R:R Target" },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <div className="text-2xl font-black text-stone-950 tracking-tight leading-none">{s.n}</div>
-                    <div className="text-xs text-stone-400 font-mono mt-0.5">{s.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right: Live chart preview card */}
-            <div className="hidden lg:flex flex-col justify-center pl-10 py-16">
-              <div className="rounded-2xl border border-stone-200 bg-stone-50 overflow-hidden shadow-sm">
-                {/* Card header */}
-                <div className="flex items-center justify-between px-5 py-3.5 border-b border-stone-200 bg-white">
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1.5">
-                      <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-                      <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
-                      <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-                    </div>
-                    <span className="text-xs font-mono text-stone-600 ml-1">EUR/USD · 1m · London Open</span>
-                  </div>
-                  <span className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    ACTIVE · 02:47 EST
-                  </span>
-                </div>
-
-                {/* Chart area */}
-                <div className="relative p-5 h-[220px]">
-                  <MiniChart />
-                </div>
-
-                {/* Telemetry strip */}
-                <div className="grid grid-cols-3 divide-x divide-stone-200 border-t border-stone-200 bg-white">
-                  {[
-                    { label: "SETUP", value: "Judas + 1m SIBI" },
-                    { label: "ENTRY", value: "50% CE @ 1.0842" },
-                    { label: "R:R", value: "1 : 3.4" },
-                  ].map((t) => (
-                    <div key={t.label} className="px-4 py-3">
-                      <div className="text-[10px] font-mono text-stone-400 uppercase">{t.label}</div>
-                      <div className="text-xs font-mono font-bold text-stone-900 mt-0.5">{t.value}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Gates strip */}
-                <div className="px-5 py-3 border-t border-stone-200 bg-stone-50 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    {[1,2,3,4,5,6].map((g) => (
-                      <span key={g} className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 border border-emerald-200 text-emerald-700">
-                        <Check className="h-2.5 w-2.5" strokeWidth={3} />
-                      </span>
-                    ))}
-                  </div>
-                  <span className="text-[10px] font-mono font-bold text-emerald-700">6/6 GATES · EXECUTE</span>
-                </div>
-              </div>
-
-              {/* Annotation cards */}
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3">
-                  <div className="text-[10px] font-mono text-rose-500 uppercase mb-1">Liquidity Raid</div>
-                  <div className="text-sm font-bold text-rose-800">BSL Purged · Wick Sweep</div>
-                  <div className="text-xs text-rose-600 mt-0.5">Bodies close back inside range</div>
-                </div>
-                <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
-                  <div className="text-[10px] font-mono text-blue-500 uppercase mb-1">Entry Model</div>
-                  <div className="text-sm font-bold text-blue-800">1m SIBI · 50% CE</div>
-                  <div className="text-xs text-blue-600 mt-0.5">Limit order at 1.08420</div>
-                </div>
-              </div>
-            </div>
-
-          </div>
+        {/* Photorealistic Horizon Landscape */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none select-none"
+          style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+        >
+          {/* Subtle top vignette and bottom fade into #0c0d0f */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0c0d0f]/50 via-transparent to-[#0c0d0f]" />
+          <div className="absolute bottom-0 left-0 right-0 h-44 bg-gradient-to-t from-[#0c0d0f] to-transparent" />
         </div>
-      </section>
 
-      {/* ── CURRICULUM OVERVIEW STRIP ────────────────────────── */}
-      <section className="border-b border-stone-200 bg-stone-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-mono text-stone-400 mr-2">CURRICULUM:</span>
-            {modules.map((m) => (
-              <Link
-                key={m.level}
-                href={m.href}
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-mono font-semibold transition-opacity hover:opacity-70 ${m.color}`}
-              >
-                {m.level}
-                <span className="font-normal opacity-70">{m.count}</span>
-              </Link>
-            ))}
-            <Link
-              href="/glossary"
-              className="ml-auto text-xs font-mono text-stone-500 hover:text-stone-900 transition-colors flex items-center gap-1"
-            >
-              71-Term Lexicon <ChevronRight className="h-3 w-3" />
+        {/* Hero content */}
+        <div className="relative z-10 flex flex-col items-center justify-center flex-1 pt-28 pb-20 px-4 text-center">
+          {/* Pill */}
+          <div className="mb-7 inline-flex items-center gap-2 text-[11px] font-medium text-white/60 border border-white/15 rounded-full px-3.5 py-1 backdrop-blur-sm bg-white/5">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+            The ICT Framework
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-[64px] font-semibold tracking-tight text-white leading-[1.1] max-w-3xl mx-auto mb-5">
+            Learn to read price<br />the way it's written.
+          </h1>
+
+          <p className="text-white/50 text-base sm:text-lg max-w-md mx-auto mb-9 leading-relaxed">
+            An interactive curriculum for the Inner Circle Trader methodology.
+            24 structured modules. No fluff.
+          </p>
+
+          <div className="flex items-center gap-3">
+            <Link href="/learn"
+              className="px-5 py-2.5 rounded-full bg-white text-stone-950 text-sm font-semibold hover:bg-white/90 transition-colors shadow-lg">
+              Start Learning
+            </Link>
+            <Link href="/practice"
+              className="px-5 py-2.5 rounded-full border border-white/20 text-white/80 text-sm hover:bg-white/8 hover:text-white transition-colors backdrop-blur-sm bg-white/5">
+              Try Practice Lab
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── BENTO GRID: CORE CONCEPTS ──────────────────────────── */}
-      <section className="border-b border-stone-200 py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Section header */}
-          <div className="mb-14 max-w-xl">
-            <p className="text-xs font-mono text-stone-400 uppercase tracking-wider mb-3">Core Framework</p>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tighter text-stone-950 leading-tight">
-              Six pillars.<br />Zero discretion.
+      {/* ═══════════════════════════════════════════════════
+          INSTITUTIONAL MARKETS STRIP (HOBBES PARTNER ROW)
+      ═══════════════════════════════════════════════════ */}
+      <section className="py-8 border-y border-white/[0.06] bg-white/[0.01]">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-wrap items-center justify-between gap-6 text-white/30 text-xs font-mono tracking-wider">
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-white/20" /> CME GROUP</span>
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-white/20" /> E-MINI S&P 500 (ES)</span>
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-white/20" /> NASDAQ 100 (NQ)</span>
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-white/20" /> EUR / USD (FX)</span>
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-white/20" /> NYMEX CRUDE (CL)</span>
+            <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-white/20" /> 10-YR T-NOTE (ZN)</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════
+          EDITORIAL STATEMENTS — Hobbes Typography
+      ═══════════════════════════════════════════════════ */}
+      <section className="py-28 md:py-36 relative overflow-hidden">
+        <div className="mx-auto max-w-4xl px-6 text-center space-y-12">
+          
+          <div className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-wider text-white/40 border border-white/10 px-3.5 py-1 rounded-full bg-white/[0.02]">
+            The Algorithmic Reality
+          </div>
+
+          <div className="space-y-6 max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-5xl md:text-5xl font-semibold tracking-tight text-white leading-[1.18]">
+              Retail traders study candles and indicators.
             </h2>
-            <p className="mt-4 text-stone-500 leading-relaxed">
-              Every profitable setup reduces to these six recurring mechanics. Learn each one in isolation, then combine them for full model execution.
+            <h2 className="text-3xl sm:text-5xl md:text-5xl font-semibold tracking-tight text-white leading-[1.18]">
+              Institutions engineer the candles retail traders study.
+            </h2>
+          </div>
+
+          <div className="space-y-4 max-w-2xl mx-auto pt-6 border-t border-white/[0.08]">
+            <p className="text-2xl sm:text-3xl font-normal tracking-tight text-white/35 leading-relaxed">
+              Traditional chart patterns lag price delivery.
+            </p>
+            <p className="text-2xl sm:text-3xl font-medium tracking-tight bg-gradient-to-r from-amber-200 via-orange-300 to-amber-400 bg-clip-text text-transparent leading-relaxed">
+              Understanding institutional liquidity changes everything.
             </p>
           </div>
 
-          {/* Bento Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-stone-200">
-            {concepts.map((c, i) => (
-              <Link
-                key={c.label}
-                href={c.href}
-                className="group bg-white p-8 flex flex-col gap-4 hover:bg-stone-50 transition-colors"
-              >
-                <div className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border ${c.bg} ${c.border} ${c.color}`}>
-                  {c.icon}
-                </div>
-                <div>
-                  <h3 className="font-bold text-stone-900 text-base mb-1 group-hover:text-stone-700 transition-colors">
-                    {c.label}
-                  </h3>
-                  <p className="text-sm text-stone-500 leading-relaxed">{c.desc}</p>
-                </div>
-                <div className={`mt-auto flex items-center gap-1 text-xs font-mono font-semibold ${c.color} opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-0.5 transition-all`}>
-                  Explore <ArrowRight className="h-3 w-3" />
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 
-      {/* ── HOW IT WORKS: 3 STEPS ─────────────────────────────── */}
-      <section className="border-b border-stone-200 py-20 md:py-28 bg-stone-950 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-14">
-            <p className="text-xs font-mono text-stone-500 uppercase tracking-wider mb-3">How It Works</p>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tighter leading-tight">
-              Study. Drill. Execute.
-            </h2>
+      {/* ═══════════════════════════════════════════════════
+          HOW IT WORKS — Left tabs, right chart
+      ═══════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 border-t border-white/[0.07]">
+        <div className="mx-auto max-w-6xl px-6">
+
+          {/* Section label */}
+          <div className="mb-12">
+            <span className="inline-flex items-center gap-2 text-[11px] font-mono text-amber-400/80">
+              <span className="h-1 w-4 bg-amber-400/50 rounded" />
+              How ICT Core teaches price delivery
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-stone-800">
-            {howItWorks.map((step) => (
-              <div key={step.step} className="bg-stone-950 p-10 flex flex-col gap-6">
-                <div className="font-mono text-5xl font-black text-stone-800 leading-none">{step.step}</div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
-                  <p className="text-stone-400 text-sm leading-relaxed">{step.body}</p>
-                </div>
-                <Link
-                  href={step.href}
-                  className="mt-auto text-xs font-mono font-semibold text-stone-400 hover:text-white transition-colors flex items-center gap-1"
-                >
-                  {step.cta}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+
+            {/* Left: step list */}
+            <div className="space-y-1">
+              {steps.map((s, i) => (
+                <button key={i} onClick={() => setActiveStep(i)}
+                  className={`w-full text-left group transition-all duration-200`}>
+                  <div className={`py-4 border-b transition-colors ${activeStep === i ? "border-white/20" : "border-white/[0.06] hover:border-white/12"}`}>
+                    <div className={`text-[15px] font-medium transition-colors ${activeStep === i ? "text-white" : "text-white/40 group-hover:text-white/60"}`}>
+                      {s.label}
+                    </div>
+                    {activeStep === i && (
+                      <p className="mt-3 text-sm text-white/50 leading-relaxed">
+                        {s.body}
+                      </p>
+                    )}
+                  </div>
+                </button>
+              ))}
+
+              <div className="pt-6">
+                <p className="text-xs text-white/25 leading-relaxed">
+                  ICT Core maps each concept to the precise module where it's taught — with diagrams, key takeaways, and a 3-question knowledge check.
+                </p>
+                <Link href="/learn" className="mt-4 inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white transition-colors font-mono">
+                  Browse curriculum <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FEATURE SPLIT: OTE + SESSIONS ─────────────────────── */}
-      <section className="border-b border-stone-200 py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-
-            {/* Left: OTE Fibonacci */}
-            <div>
-              <p className="text-xs font-mono text-stone-400 uppercase tracking-wider mb-3">Pricing Model</p>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tighter text-stone-950 mb-4">
-                The 0.705 Sweet Spot
-              </h2>
-              <p className="text-stone-500 leading-relaxed mb-8 text-sm">
-                Institutions don't buy at random. They target specific Fibonacci retracement
-                levels inside a defined dealing range. The 0.705 level — the Optimal Trade
-                Entry — is where asymmetric risk:reward setups concentrate.
-              </p>
-
-              {/* OTE visual */}
-              <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                <div className="text-[10px] font-mono text-stone-400 uppercase mb-4">OTE FIBONACCI LADDER</div>
-                <OteStrip />
-                <div className="mt-5 pt-4 border-t border-stone-100 flex items-center gap-3">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 border border-orange-200 text-xs font-mono font-bold text-orange-700">
-                    ✦ 0.705 = Institutional Entry Zone
-                  </span>
-                  <span className="text-xs text-stone-400 font-mono">Standard R:R ≥ 1:3</span>
-                </div>
-              </div>
-
-              <Link href="/learn/intermediate/premium-discount-and-ote" className="mt-6 inline-flex items-center gap-2 text-sm font-mono font-semibold text-stone-700 hover:text-stone-950 transition-colors">
-                Study the OTE Model <ArrowRight className="h-4 w-4" />
-              </Link>
             </div>
 
-            {/* Right: Killzones */}
-            <div>
-              <p className="text-xs font-mono text-stone-400 uppercase tracking-wider mb-3">Time & Price</p>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tighter text-stone-950 mb-4">
-                Sessions & Macros
-              </h2>
-              <p className="text-stone-500 leading-relaxed mb-8 text-sm">
-                The algorithm delivers price during predictable 20-minute macro cycles.
-                Outside these windows, setups carry a fraction of the probability.
-                Timing is a non-negotiable gate, not a suggestion.
-              </p>
+            {/* Right: chart preview */}
+            <div className="space-y-4">
+              <div className="rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl">
+                {/* Window chrome */}
+                <div className="flex items-center justify-between px-4 py-3 bg-[#141618] border-b border-white/[0.08]">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-white/10" />
+                    </div>
+                    <span className="text-[11px] font-mono text-white/30 ml-2">EUR/USD · 1m · London Open</span>
+                  </div>
+                  <span className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400/80">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    02:47 EST
+                  </span>
+                </div>
 
-              {/* Sessions visual */}
-              <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                <div className="text-[10px] font-mono text-stone-400 uppercase mb-4">24-HOUR INSTITUTIONAL SCHEDULE (NY EST)</div>
-                <SessionTimeline />
+                {/* Chart */}
+                <div className="h-[200px] sm:h-[240px]">
+                  <MiniChart theme="dark" />
+                </div>
 
-                {/* Session cards */}
-                <div className="mt-5 grid grid-cols-2 gap-2">
+                {/* Telemetry */}
+                <div className="grid grid-cols-3 divide-x divide-white/[0.06] border-t border-white/[0.06]">
                   {[
-                    { name: "London Open", time: "02:00–05:00", color: "bg-emerald-50 border-emerald-200 text-emerald-800" },
-                    { name: "NY AM", time: "07:00–10:00", color: "bg-amber-50 border-amber-200 text-amber-800" },
-                    { name: "Silver Bullet", time: "10:00–11:00", color: "bg-orange-50 border-orange-200 text-orange-800" },
-                    { name: "NY PM", time: "13:30–16:00", color: "bg-purple-50 border-purple-200 text-purple-800" },
-                  ].map((s) => (
-                    <div key={s.name} className={`px-3 py-2 rounded-lg border text-xs font-mono ${s.color}`}>
-                      <div className="font-bold">{s.name}</div>
-                      <div className="opacity-70">{s.time}</div>
+                    { label: "PATTERN", value: "Judas + 1m SIBI" },
+                    { label: "ENTRY", value: "50% CE · 1.0842" },
+                    { label: "R:R", value: "1 : 3.4" },
+                  ].map(t => (
+                    <div key={t.label} className="px-4 py-3 bg-[#111214]">
+                      <div className="text-[10px] font-mono text-white/25 uppercase">{t.label}</div>
+                      <div className="text-xs font-mono font-semibold text-white/80 mt-1">{t.value}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <Link href="/killzones" className="mt-6 inline-flex items-center gap-2 text-sm font-mono font-semibold text-stone-700 hover:text-stone-950 transition-colors">
-                View Full Schedule <ArrowRight className="h-4 w-4" />
-              </Link>
+              {/* Annotation chips */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-xl border border-red-500/20 bg-red-950/20 px-4 py-3">
+                  <div className="text-[10px] font-mono text-red-400/60 uppercase mb-1">Liquidity Sweep</div>
+                  <div className="text-sm font-semibold text-white/80">BSL Purged</div>
+                  <div className="text-xs text-white/30 mt-0.5">Bodies close back inside range</div>
+                </div>
+                <div className="rounded-xl border border-blue-500/20 bg-blue-950/20 px-4 py-3">
+                  <div className="text-[10px] font-mono text-blue-400/60 uppercase mb-1">Entry Model</div>
+                  <div className="text-sm font-semibold text-white/80">1m SIBI · 50% CE</div>
+                  <div className="text-xs text-white/30 mt-0.5">Limit order · gate 4 confirmed</div>
+                </div>
+              </div>
+
+              {/* 6-gate row */}
+              <div className="rounded-xl border border-white/[0.08] bg-[#111214] px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  {[1,2,3,4,5,6].map(g => (
+                    <span key={g} className="h-5 w-5 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
+                      <Check className="h-2.5 w-2.5 text-emerald-400" strokeWidth={3} />
+                    </span>
+                  ))}
+                </div>
+                <span className="text-[11px] font-mono text-emerald-400/70 font-semibold">6/6 GATES · AUTHORIZED</span>
+              </div>
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* ── 6-GATE PROTOCOL ───────────────────────────────────── */}
-      <section className="border-b border-stone-200 py-20 md:py-28 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+      {/* ═══════════════════════════════════════════════════
+          CURRICULUM ACCORDIONS — Interactive Dropdown Drawers
+      ═══════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 border-t border-white/[0.07]">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
 
-            {/* Left: copy */}
-            <div className="lg:sticky lg:top-24">
-              <p className="text-xs font-mono text-stone-400 uppercase tracking-wider mb-3">Risk Governance</p>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tighter text-stone-950 leading-tight mb-6">
-                6 gates.<br />All must lock.
+            {/* Left: heading */}
+            <div className="lg:col-span-5 lg:sticky lg:top-24 self-start space-y-5">
+              <div className="inline-flex items-center gap-2 text-[11px] font-mono text-amber-400/90 uppercase tracking-wider bg-amber-400/10 border border-amber-400/20 px-3 py-1 rounded-full">
+                <span>✦</span>
+                <span>24 Structured Modules</span>
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-white leading-tight">
+                Everything<br />covered.
               </h2>
-              <p className="text-stone-500 leading-relaxed text-sm mb-8">
-                No trade executes without passing all six gates simultaneously.
-                This protocol converts impulsive emotional entries into a
-                disciplined, repeatable process governed entirely by price
-                mechanics — not opinion.
+              <p className="text-white/40 text-sm leading-relaxed max-w-sm">
+                From the first principles of interbank liquidity all the way through live execution models. Expand any section to explore lessons and drills.
               </p>
-              <Link
-                href="/checklist"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-stone-950 text-white text-sm font-semibold hover:bg-stone-800 transition-colors"
-              >
-                Launch Pre-Trade Checklist
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-
-              {/* Stats */}
-              <div className="mt-12 grid grid-cols-2 gap-4">
-                <div className="p-5 rounded-2xl border border-stone-200 bg-stone-50">
-                  <div className="text-3xl font-black text-stone-950 tracking-tight">0%</div>
-                  <div className="text-xs font-mono text-stone-400 mt-1">Discretionary entries allowed</div>
-                </div>
-                <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50">
-                  <div className="text-3xl font-black text-emerald-700 tracking-tight">1:2+</div>
-                  <div className="text-xs font-mono text-emerald-600 mt-1">Minimum R:R before entry</div>
-                </div>
+              <div className="pt-2">
+                <Link href="/learn" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-stone-950 text-sm font-semibold hover:bg-white/90 transition-colors">
+                  <span>Open Full Curriculum</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
 
-            {/* Right: gate list */}
-            <div className="space-y-3">
-              {gates.map((g) => (
-                <div
-                  key={g.gate}
-                  className="flex items-start gap-5 p-5 rounded-2xl border border-stone-200 bg-white hover:border-stone-300 hover:shadow-sm transition-all"
-                >
-                  <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-xl bg-stone-100 font-mono text-xs font-black text-stone-600">
-                    {g.gate}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-stone-900 text-sm">{g.label}</div>
-                    <div className="text-xs text-stone-500 font-mono mt-0.5">{g.sub}</div>
-                  </div>
-                  <span className="shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 border border-emerald-200">
-                    <Check className="h-3 w-3 text-emerald-700" strokeWidth={3} />
-                  </span>
-                </div>
-              ))}
+            {/* Right: Accordion Drawer Group */}
+            <div className="lg:col-span-7 space-y-3.5">
+              {curriculumTiers.map((tier) => {
+                const isOpen = openTier === tier.id;
+                return (
+                  <div
+                    key={tier.id}
+                    className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                      isOpen
+                        ? "bg-white/[0.03] border-white/20 shadow-xl"
+                        : "bg-white/[0.015] border-white/[0.07] hover:border-white/12 hover:bg-white/[0.025]"
+                    }`}
+                  >
+                    {/* Accordion Trigger Header */}
+                    <button
+                      onClick={() => setOpenTier(isOpen ? "" : tier.id)}
+                      className="w-full flex items-center justify-between p-5 text-left transition-colors cursor-pointer"
+                      aria-expanded={isOpen}
+                    >
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-md border ${tier.accentBg} ${tier.color}`}>
+                          {tier.tier}
+                        </span>
+                        <div className="min-w-0">
+                          <h3 className="text-base font-semibold text-white tracking-tight flex items-center gap-2">
+                            <span>{tier.title}</span>
+                          </h3>
+                          <p className="text-xs text-white/40 truncate mt-0.5">
+                            {tier.subtitle}
+                          </p>
+                        </div>
+                      </div>
 
-              {/* Final locked state */}
-              <div className="flex items-center justify-between mt-2 p-4 rounded-2xl bg-emerald-950 text-emerald-300">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-3 w-3 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
-                  </span>
-                  <span className="text-sm font-mono font-bold">6 / 6 GATES LOCKED</span>
-                </div>
-                <span className="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider">
-                  Execution Authorized
-                </span>
-              </div>
+                      <div className="flex items-center gap-3 shrink-0 ml-4">
+                        <span className="hidden sm:inline-block text-[11px] font-mono text-white/35">
+                          {tier.tag}
+                        </span>
+                        <div
+                          className={`h-7 w-7 rounded-lg border flex items-center justify-center transition-transform duration-300 ${
+                            isOpen
+                              ? "bg-white/10 border-white/20 text-white rotate-180"
+                              : "bg-white/[0.04] border-white/[0.08] text-white/50"
+                          }`}
+                        >
+                          <ChevronDown className="h-4 w-4" />
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Accordion Expandable Content (CSS Grid Row Animation) */}
+                    <div
+                      className={`grid transition-all duration-300 ease-in-out ${
+                        isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="p-4 sm:p-5 pt-0 border-t border-white/[0.06] mt-1 space-y-2">
+                          {tier.modules.map((mod, i) => (
+                            <Link
+                              key={mod.slug}
+                              href={tier.id === "practice" ? `/practice` : `/learn/${mod.level}/${mod.slug}`}
+                              className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-transparent hover:border-white/[0.08] transition-all group/mod"
+                            >
+                              <div className="flex items-center gap-3 min-w-0">
+                                <span className="font-mono text-xs text-white/30 shrink-0 w-5">
+                                  {String(i + 1).padStart(2, "0")}
+                                </span>
+                                <div className="min-w-0">
+                                  <div className="text-sm font-medium text-white/80 group-hover/mod:text-white transition-colors truncate">
+                                    {mod.title}
+                                  </div>
+                                  <div className="text-xs text-white/40 truncate">
+                                    {mod.desc}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-3 shrink-0 ml-4">
+                                <span className="text-[11px] font-mono text-white/40 hidden sm:inline">
+                                  {mod.time}
+                                </span>
+                                <span className="text-xs text-white/40 group-hover/mod:text-white group-hover/mod:translate-x-0.5 transition-all">
+                                  →
+                                </span>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                );
+              })}
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* ── LEXICON CTA ──────────────────────────────────────── */}
-      <section className="border-b border-stone-200 py-20 md:py-28 bg-stone-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
+      {/* ═══════════════════════════════════════════════════
+          6-GATE PROTOCOL
+      ═══════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 border-t border-white/[0.07]">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+
             <div>
-              <p className="text-xs font-mono text-stone-400 uppercase tracking-wider mb-3">A–Z Lexicon</p>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tighter text-stone-950 leading-tight mb-4">
-                71 standardised definitions.
+              <span className="text-[11px] font-mono text-white/25 uppercase tracking-wider">Risk Governance</span>
+              <h2 className="mt-4 text-4xl sm:text-5xl font-semibold tracking-tight text-white leading-tight mb-5">
+                All six gates.<br />No exceptions.
               </h2>
-              <p className="text-stone-500 leading-relaxed text-sm mb-8 max-w-md">
-                BISI, SIBI, SMT, NWOG, CBDR, IPDA, OTE, Breaker Block, Inversion FVG — every
-                term defined precisely with context and usage notes.
+              <p className="text-white/35 text-sm leading-relaxed mb-8 max-w-sm">
+                The protocol converts impulsive entries into a repeatable process.
+                A trade that fails one gate is not taken. Period.
               </p>
-              <Link
-                href="/glossary"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-stone-950 text-white text-sm font-semibold hover:bg-stone-800 transition-colors"
-              >
-                Open Lexicon
-                <ArrowRight className="h-4 w-4" />
+              <Link href="/checklist"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-stone-950 text-sm font-semibold hover:bg-white/90 transition-colors">
+                Open checklist <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
-            {/* Sample terms grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div className="space-y-2">
               {[
-                "BISI", "SIBI", "FVG", "OTE", "MSS", "BOS",
-                "IPDA", "SMT", "DOL", "CBDR", "NWOG", "CE",
-                "BSL", "SSL", "MMSM", "Power of 3", "Unicorn", "Breaker",
-              ].map((term) => (
-                <div
-                  key={term}
-                  className="px-3 py-2 rounded-lg border border-stone-200 bg-white text-xs font-mono font-semibold text-stone-700 text-center hover:border-stone-400 hover:bg-stone-50 transition-colors cursor-default"
-                >
-                  {term}
+                { n: "01", label: "Active killzone or algorithmic macro window" },
+                { n: "02", label: "Prominent liquidity pool swept by wick" },
+                { n: "03", label: "Displacement candles shift market structure (bodies)" },
+                { n: "04", label: "Fair Value Gap created by displacement impulse" },
+                { n: "05", label: "Entry in discount (longs) or premium (shorts)" },
+                { n: "06", label: "Minimum 1:2 risk-to-reward before order placement" },
+              ].map((g) => (
+                <div key={g.n} className="flex items-start gap-4 py-3.5 px-4 rounded-xl border border-white/[0.07] bg-white/[0.02] hover:border-white/12 hover:bg-white/[0.035] transition-all group">
+                  <span className="text-[11px] font-mono text-white/20 w-5 shrink-0 mt-0.5">{g.n}</span>
+                  <span className="text-sm text-white/55 group-hover:text-white/70 transition-colors leading-relaxed">{g.label}</span>
+                  <Check className="h-4 w-4 text-emerald-500/60 shrink-0 mt-0.5 ml-auto" strokeWidth={2.5} />
                 </div>
               ))}
+
+              <div className="flex items-center justify-between mt-1 px-4 py-3 rounded-xl bg-emerald-950/40 border border-emerald-500/20">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-sm font-mono font-semibold text-emerald-400">6 / 6 Locked</span>
+                </div>
+                <span className="text-[11px] font-mono text-emerald-400/50 uppercase tracking-wider">Execution Authorized</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── FINAL CTA ────────────────────────────────────────── */}
-      <section className="py-24 bg-stone-950">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl sm:text-6xl font-black tracking-tighter text-white leading-tight mb-6">
-            Stop reacting.<br />
-            <span className="text-stone-400">Start engineering.</span>
+      {/* ═══════════════════════════════════════════════════
+          CLOSING CTA
+      ═══════════════════════════════════════════════════ */}
+      <section className="relative py-32 border-t border-white/[0.07] overflow-hidden">
+        {/* Subtle horizon reprise */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[300px] bg-gradient-to-t from-amber-900/10 via-transparent to-transparent rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-3xl px-6 text-center">
+          <h2 className="text-4xl sm:text-5xl md:text-[60px] font-semibold tracking-tight text-white leading-[1.1] mb-6">
+            Stop being<br />the liquidity.
           </h2>
-          <p className="text-stone-400 text-lg leading-relaxed max-w-xl mx-auto mb-10">
-            The curriculum is free. The drills are live. The protocol is non-negotiable.
-            Everything you need to trade with institutional precision is here.
+          <p className="text-white/35 text-base sm:text-lg leading-relaxed mb-10 max-w-md mx-auto">
+            24 free modules. Interactive practice drills. The 6-gate checklist.
+            Everything to understand what's actually happening on your chart.
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link
-              href="/learn"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-stone-950 font-bold text-sm hover:bg-stone-100 transition-colors shadow-lg"
-            >
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link href="/learn"
+              className="px-7 py-3.5 rounded-full bg-white text-stone-950 font-semibold text-sm hover:bg-white/90 transition-colors shadow-xl">
               Start the Curriculum
-              <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link
-              href="/glossary"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-stone-700 text-stone-300 text-sm font-medium hover:bg-stone-900 hover:border-stone-600 transition-colors"
-            >
-              Browse Lexicon
+            <Link href="/glossary"
+              className="px-7 py-3.5 rounded-full border border-white/15 text-white/60 text-sm hover:text-white hover:border-white/30 transition-colors">
+              Browse the Lexicon
             </Link>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-stone-800 bg-stone-950 py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* ═══════════════════════════════════════════════════
+          FOOTER
+      ═══════════════════════════════════════════════════ */}
+      <footer className="border-t border-white/[0.07] py-10">
+        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="h-7 w-7 rounded-xl bg-stone-800 border border-stone-700 flex items-center justify-center text-stone-300 text-xs font-bold">
-              ✦
-            </div>
-            <span className="text-sm font-bold text-stone-300">ICT Core</span>
-            <span className="text-xs text-stone-600">— Institutional Price Delivery Architecture</span>
+            <div className="h-7 w-7 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center text-white/50 text-xs">✦</div>
+            <span className="text-sm font-medium text-white/40">ICT Core</span>
           </div>
           <div className="flex items-center gap-6">
-            {[
-              { label: "Curriculum", href: "/learn" },
-              { label: "Practice", href: "/practice" },
-              { label: "Checklist", href: "/checklist" },
-              { label: "Lexicon", href: "/glossary" },
-            ].map((l) => (
-              <Link key={l.label} href={l.href} className="text-xs text-stone-500 hover:text-stone-300 transition-colors">
-                {l.label}
-              </Link>
+            {[["Curriculum","/learn"],["Practice","/practice"],["Checklist","/checklist"],["Lexicon","/glossary"]].map(([l,h]) => (
+              <Link key={l} href={h} className="text-xs text-white/25 hover:text-white/50 transition-colors">{l}</Link>
             ))}
           </div>
-          <p className="text-xs text-stone-600">
-            Educational purposes only. Not financial advice.
-          </p>
+          <p className="text-xs text-white/20">Educational only. Not financial advice.</p>
         </div>
       </footer>
     </div>

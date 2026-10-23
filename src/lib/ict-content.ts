@@ -2570,6 +2570,17 @@ export function getModuleBySlug(levelSlug: string, moduleSlug: string): Curricul
   );
 }
 
+export function getAdjacentModules(
+  moduleSlug: string
+): { prev?: CurriculumModule; next?: CurriculumModule } {
+  const all = CURRICULUM_MODULES;
+  const idx = all.findIndex((m) => m.slug === moduleSlug);
+  return {
+    prev: idx > 0 ? all[idx - 1] : undefined,
+    next: idx >= 0 && idx < all.length - 1 ? all[idx + 1] : undefined,
+  };
+}
+
 export function getNextAndPrevModule(
   levelSlug: string,
   moduleSlug: string

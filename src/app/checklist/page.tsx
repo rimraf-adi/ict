@@ -6,7 +6,8 @@ import {
   CheckSquare, 
   ShieldCheck, 
   RotateCcw,
-  Info
+  Info,
+  Check
 } from "lucide-react";
 
 interface Gate {
@@ -38,15 +39,15 @@ export default function ChecklistPage() {
     },
     {
       id: "structure",
-      name: "Gate 3: Market Structure Shift (MSS)",
-      question: "Did price violently shift market structure with candle body closes?",
-      description: "Must break the opposite fractal swing point with candle body closing across the level (wicks do the damage, bodies tell the story).",
-      rule: "Rule: A wick piercing a swing point without a candle body close is merely a sweep, NOT an MSS.",
+      name: "Gate 3: Market Structure Shift (MSS) with Displacement",
+      question: "Has price violently broken opposing market structure with full-bodied candles?",
+      description: "Wicks only sweep liquidity; candle bodies must close clearly beyond the fractal swing point to validate institutional intent.",
+      rule: "Rule: A wick beyond a swing high/low is NOT an MSS — it is another liquidity purge.",
       checked: false,
     },
     {
-      id: "displacement",
-      name: "Gate 4: Energetic Displacement & Pristine FVG",
+      id: "imbalance",
+      name: "Gate 4: Energetic Fair Value Gap (FVG / Imbalance)",
       question: "Did the impulse move leave a clear, unmitigated Fair Value Gap (FVG)?",
       description: "Large-bodied candles with minimal wicks, demonstrating unambiguous institutional order sponsorship.",
       rule: "Rule: If the candles are choppy, overlapping, and small-bodied, smart money is absent.",
@@ -114,37 +115,38 @@ export default function ChecklistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBFBFC] text-zinc-900 flex flex-col antialiased selection:bg-amber-500/20 selection:text-zinc-900">
+    <div className="min-h-screen bg-[#0c0d0f] text-white flex flex-col antialiased selection:bg-amber-400/20 selection:text-white">
       <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-10">
         
         {/* Header */}
         <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-200 bg-white text-xs font-medium text-zinc-600 shadow-sm">
-            <CheckSquare className="h-3.5 w-3.5 text-amber-500" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs font-mono font-medium text-white/60">
+            <CheckSquare className="h-3.5 w-3.5 text-amber-400" />
             <span>Institutional Execution Rulebook</span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
             <div>
-              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900">
+              <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white">
                 The 6-Gate Trade Checklist
               </h1>
-              <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-xl leading-relaxed">
+              <p className="text-sm sm:text-base text-white/50 mt-2 max-w-xl leading-relaxed">
                 A non-negotiable quantitative filter. Clear all 6 sequential gates before deploying risk on any trade.
               </p>
             </div>
 
-            <div className={`p-4 rounded-2xl border font-mono text-left sm:text-right shrink-0 shadow-sm ${
+            <div className={`p-4 rounded-2xl border font-mono text-left sm:text-right shrink-0 ${
               allPassed 
-                ? "bg-emerald-50 border-emerald-300 text-emerald-950" 
-                : "bg-white border-zinc-200 text-zinc-700"
+                ? "bg-emerald-950/40 border-emerald-500/30 text-emerald-300" 
+                : "bg-white/[0.02] border-white/[0.08] text-white/70"
             }`}>
-              <div className="text-[11px] font-semibold uppercase">
-                {allPassed ? "Status: Authorized ✓" : `Status: Locked (${passedCount}/6)`}
+              <div className="text-[11px] font-semibold uppercase flex items-center gap-2 justify-end">
+                {allPassed && <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />}
+                <span>{allPassed ? "Status: Authorized ✓" : `Status: Locked (${passedCount}/6)`}</span>
               </div>
-              <div className="text-xs text-zinc-500 mt-0.5">
+              <div className="text-xs text-white/40 mt-0.5">
                 {allPassed ? "All criteria aligned" : "Clear all gates before entry"}
               </div>
             </div>
@@ -156,13 +158,13 @@ export default function ChecklistPage() {
           
           {/* Left Column: Gates (7 Cols) */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-zinc-200">
-              <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest font-semibold">
+            <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
+              <span className="text-xs font-mono text-white/40 uppercase tracking-widest font-semibold">
                 Sequential Verification
               </span>
               <button 
                 onClick={resetAllGates}
-                className="flex items-center gap-1 text-xs font-mono text-zinc-500 hover:text-zinc-900 transition-colors"
+                className="flex items-center gap-1 text-xs font-mono text-white/50 hover:text-white transition-colors"
               >
                 <RotateCcw className="h-3 w-3" />
                 Reset
@@ -176,40 +178,42 @@ export default function ChecklistPage() {
                   onClick={() => toggleGate(gate.id)}
                   className={`cursor-pointer p-4 rounded-2xl border transition-all ${
                     gate.checked
-                      ? "bg-emerald-50/70 border-emerald-300 shadow-xs"
-                      : "bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-sm"
+                      ? "bg-emerald-950/30 border-emerald-500/30"
+                      : "bg-white/[0.02] border-white/[0.07] hover:border-white/15 hover:bg-white/[0.035]"
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <div className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-md border ${
                       gate.checked 
-                        ? "bg-emerald-600 border-emerald-600 text-white" 
-                        : "border-zinc-300 bg-white"
+                        ? "bg-emerald-500 border-emerald-500 text-stone-950" 
+                        : "border-white/20 bg-white/5"
                     }`}>
-                      {gate.checked && <ShieldCheck className="h-3.5 w-3.5 stroke-[2.5]" />}
+                      {gate.checked && <Check className="h-3 w-3 stroke-[3]" />}
                     </div>
 
                     <div className="space-y-1 flex-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono font-semibold text-zinc-900">
+                        <span className="text-xs font-mono font-semibold text-white/90">
                           {gate.name}
                         </span>
-                        <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
-                          gate.checked ? "bg-emerald-100 text-emerald-800" : "bg-zinc-100 text-zinc-500"
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                          gate.checked 
+                            ? "bg-emerald-950/60 border-emerald-500/30 text-emerald-300 font-bold" 
+                            : "bg-white/5 border-white/10 text-white/40"
                         }`}>
                           {gate.checked ? "PASSED" : "PENDING"}
                         </span>
                       </div>
                       
-                      <p className="text-xs font-medium text-zinc-900">
+                      <p className="text-xs font-medium text-white/80">
                         {gate.question}
                       </p>
                       
-                      <p className="text-xs text-zinc-500 leading-relaxed">
+                      <p className="text-xs text-white/45 leading-relaxed">
                         {gate.description}
                       </p>
 
-                      <div className="pt-1 text-[11px] font-mono text-zinc-500 border-t border-zinc-100 mt-2">
+                      <div className="pt-2 text-[11px] font-mono text-white/40 border-t border-white/[0.06] mt-2">
                         {gate.rule}
                       </div>
                     </div>
@@ -221,20 +225,20 @@ export default function ChecklistPage() {
 
           {/* Right Column: Calculator (5 Cols) */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="pb-1 border-b border-zinc-200">
-              <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest">
+            <div className="pb-1 border-b border-white/[0.08]">
+              <span className="text-xs font-mono text-white/40 uppercase tracking-widest font-semibold">
                 Position Sizing & Risk
               </span>
             </div>
 
-            <div className="p-5 rounded-lg border border-zinc-200 bg-zinc-50 space-y-4">
+            <div className="p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] space-y-4">
               
               {/* Asset Class */}
               <div>
-                <label className="text-xs font-mono text-zinc-500 uppercase block mb-1.5">
+                <label className="text-xs font-mono text-white/40 uppercase block mb-1.5">
                   Asset Class
                 </label>
-                <div className="grid grid-cols-2 gap-1.5 text-xs font-medium">
+                <div className="grid grid-cols-2 gap-1.5 text-xs font-medium font-mono">
                   {[
                     { id: "index_nq", label: "Nasdaq (NQ)" },
                     { id: "index_es", label: "S&P (ES)" },
@@ -244,10 +248,10 @@ export default function ChecklistPage() {
                     <button
                       key={asset.id}
                       onClick={() => setAssetType(asset.id as any)}
-                      className={`px-3 py-1.5 rounded border text-left transition-colors ${
+                      className={`px-3 py-1.5 rounded-lg border text-left transition-colors ${
                         assetType === asset.id
-                          ? "bg-zinc-900 border-zinc-900 text-white"
-                          : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300"
+                          ? "bg-white text-stone-950 font-bold border-white"
+                          : "border-white/[0.08] bg-white/[0.03] text-white/70 hover:border-white/20 hover:text-white"
                       }`}
                     >
                       {asset.label}
@@ -258,32 +262,32 @@ export default function ChecklistPage() {
 
               {/* Account Balance */}
               <div>
-                <label className="text-xs font-mono text-zinc-500 uppercase block mb-1">
+                <label className="text-xs font-mono text-white/40 uppercase block mb-1">
                   Account Capital ($ USD)
                 </label>
                 <input
                   type="number"
                   value={accountBalance}
                   onChange={(e) => setAccountBalance(Number(e.target.value))}
-                  className="w-full px-3 py-1.5 rounded border border-zinc-200 bg-white font-mono text-sm text-zinc-900 focus:outline-none focus:border-zinc-400"
+                  className="w-full px-3 py-2 rounded-xl border border-white/[0.08] bg-white/[0.03] font-mono text-sm text-white focus:outline-none focus:border-amber-400/50"
                 />
               </div>
 
               {/* Risk % */}
               <div>
-                <div className="flex items-center justify-between text-xs font-mono text-zinc-500 uppercase mb-1">
+                <div className="flex items-center justify-between text-xs font-mono text-white/40 uppercase mb-1">
                   <span>Risk Per Trade</span>
-                  <span className="text-zinc-900 font-bold">{riskPercent}% (${dollarRisk.toFixed(2)})</span>
+                  <span className="text-white font-bold">{riskPercent}% (${dollarRisk.toFixed(2)})</span>
                 </div>
                 <div className="grid grid-cols-4 gap-1.5 text-xs font-mono">
                   {[0.25, 0.5, 0.75, 1.0].map((pct) => (
                     <button
                       key={pct}
                       onClick={() => setRiskPercent(pct)}
-                      className={`py-1 rounded border transition-colors ${
+                      className={`py-1.5 rounded-lg border transition-colors ${
                         riskPercent === pct
-                          ? "bg-zinc-900 border-zinc-900 text-white font-bold"
-                          : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300"
+                          ? "bg-white text-stone-950 font-bold border-white"
+                          : "border-white/[0.08] bg-white/[0.03] text-white/70 hover:border-white/20 hover:text-white"
                       }`}
                     >
                       {pct}%
@@ -295,7 +299,7 @@ export default function ChecklistPage() {
               {/* Entry & Stop Loss */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs font-mono text-zinc-500 uppercase block mb-1">
+                  <label className="text-xs font-mono text-white/40 uppercase block mb-1">
                     Entry Price
                   </label>
                   <input
@@ -303,11 +307,11 @@ export default function ChecklistPage() {
                     step="any"
                     value={entryPrice}
                     onChange={(e) => setEntryPrice(Number(e.target.value))}
-                    className="w-full px-3 py-1.5 rounded border border-zinc-200 bg-white font-mono text-sm text-zinc-900 focus:outline-none focus:border-zinc-400"
+                    className="w-full px-3 py-2 rounded-xl border border-white/[0.08] bg-white/[0.03] font-mono text-sm text-white focus:outline-none focus:border-amber-400/50"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-mono text-zinc-500 uppercase block mb-1">
+                  <label className="text-xs font-mono text-white/40 uppercase block mb-1">
                     Stop Loss Price
                   </label>
                   <input
@@ -315,35 +319,35 @@ export default function ChecklistPage() {
                     step="any"
                     value={stopLossPrice}
                     onChange={(e) => setStopLossPrice(Number(e.target.value))}
-                    className="w-full px-3 py-1.5 rounded border border-zinc-200 bg-white font-mono text-sm text-rose-700 focus:outline-none focus:border-rose-400"
+                    className="w-full px-3 py-2 rounded-xl border border-white/[0.08] bg-white/[0.03] font-mono text-sm text-rose-400 focus:outline-none focus:border-rose-400/50"
                   />
                 </div>
               </div>
 
               {/* Results */}
-              <div className="p-3.5 rounded border border-zinc-200 bg-white space-y-2 font-mono text-xs">
+              <div className="p-4 rounded-xl border border-white/[0.08] bg-white/[0.02] space-y-2.5 font-mono text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-zinc-500">Stop Distance:</span>
-                  <span className="text-zinc-900 font-semibold">{priceDistance.toFixed(2)} pts</span>
+                  <span className="text-white/40">Stop Distance:</span>
+                  <span className="text-white font-semibold">{priceDistance.toFixed(2)} pts</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-zinc-500">Capital at Risk:</span>
-                  <span className="text-rose-600 font-semibold">${dollarRisk.toFixed(2)}</span>
+                  <span className="text-white/40">Capital at Risk:</span>
+                  <span className="text-rose-400 font-semibold">${dollarRisk.toFixed(2)}</span>
                 </div>
-                <div className="flex items-center justify-between border-t border-zinc-100 pt-2">
-                  <span className="text-zinc-500">Position Size:</span>
-                  <span className="text-zinc-950 font-bold">
+                <div className="flex items-center justify-between border-t border-white/[0.06] pt-2">
+                  <span className="text-white/40">Position Size:</span>
+                  <span className="text-white font-bold text-sm">
                     {positionUnits.toFixed(2)} {unitLabel}
                   </span>
                 </div>
-                <div className="border-t border-zinc-100 pt-2 text-[11px] text-zinc-500 space-y-1">
+                <div className="border-t border-white/[0.06] pt-2 text-[11px] text-white/40 space-y-1">
                   <div className="flex justify-between">
                     <span>1:2 R:R Target:</span>
-                    <span className="text-zinc-900 font-medium">{target1To2.toFixed(2)} (+${(dollarRisk * 2).toFixed(2)})</span>
+                    <span className="text-emerald-400 font-medium">{target1To2.toFixed(2)} (+${(dollarRisk * 2).toFixed(2)})</span>
                   </div>
                   <div className="flex justify-between">
                     <span>1:3 R:R Target:</span>
-                    <span className="text-zinc-900 font-medium">{target1To3.toFixed(2)} (+${(dollarRisk * 3).toFixed(2)})</span>
+                    <span className="text-emerald-400 font-medium">{target1To3.toFixed(2)} (+${(dollarRisk * 3).toFixed(2)})</span>
                   </div>
                 </div>
               </div>
@@ -355,7 +359,7 @@ export default function ChecklistPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200 py-8 text-xs font-mono text-zinc-500 bg-zinc-50">
+      <footer className="border-t border-white/[0.08] py-8 text-xs font-mono text-white/30 bg-[#08090b]">
         <div className="max-w-5xl mx-auto px-6 flex items-center justify-between">
           <span>ICT Core — 6-Gate Execution</span>
           <span>Next.js · TypeScript</span>

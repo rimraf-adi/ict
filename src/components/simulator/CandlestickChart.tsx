@@ -193,34 +193,34 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative flex flex-col bg-white border border-zinc-200/90 rounded-2xl overflow-hidden select-none font-sans shadow-sm ${className}`}
+      className={`relative flex flex-col bg-[#0c0d0f] border border-white/[0.08] rounded-2xl overflow-hidden select-none font-sans shadow-sm ${className}`}
     >
       {/* Top Readout & Overlays Toolbar */}
-      <div className="flex flex-wrap items-center justify-between px-4 py-2.5 bg-zinc-50 border-b border-zinc-200 text-xs">
+      <div className="flex flex-wrap items-center justify-between px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.08] text-xs">
         {/* OHLC Readout */}
-        <div className="flex items-center gap-3 font-mono text-[11px] text-zinc-700">
+        <div className="flex items-center gap-3 font-mono text-[11px] text-white/70">
           {displayCandle ? (
             <>
-              <span className="text-zinc-800 font-semibold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+              <span className="text-white font-semibold flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
                 {displayCandle.time}
               </span>
-              <span className="text-zinc-500">
-                O: <span className="text-zinc-900 font-semibold">{formatPrice(displayCandle.open)}</span>
+              <span className="text-white/40">
+                O: <span className="text-white font-semibold">{formatPrice(displayCandle.open)}</span>
               </span>
-              <span className="text-zinc-500">
-                H: <span className="text-zinc-900 font-semibold">{formatPrice(displayCandle.high)}</span>
+              <span className="text-white/40">
+                H: <span className="text-white font-semibold">{formatPrice(displayCandle.high)}</span>
               </span>
-              <span className="text-zinc-500">
-                L: <span className="text-zinc-900 font-semibold">{formatPrice(displayCandle.low)}</span>
+              <span className="text-white/40">
+                L: <span className="text-white font-semibold">{formatPrice(displayCandle.low)}</span>
               </span>
-              <span className="text-zinc-500">
+              <span className="text-white/40">
                 C:{' '}
                 <span
                   className={
                     displayCandle.close >= displayCandle.open
-                      ? 'text-emerald-600 font-bold'
-                      : 'text-rose-600 font-bold'
+                      ? 'text-emerald-400 font-bold'
+                      : 'text-rose-400 font-bold'
                   }
                 >
                   {formatPrice(displayCandle.close)}
@@ -228,23 +228,23 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
               </span>
               <span
                 className={`font-semibold ${
-                  candleChange >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                  candleChange >= 0 ? 'text-emerald-400' : 'text-rose-400'
                 }`}
               >
                 {candleChange >= 0 ? '+' : ''}
                 {formatPrice(candleChange)} ({candlePercent.toFixed(2)}%)
               </span>
               {displayCandle.volume && (
-                <span className="text-zinc-500 hidden sm:inline">
+                <span className="text-white/40 hidden sm:inline">
                   Vol:{' '}
-                  <span className="text-zinc-800 font-semibold">
+                  <span className="text-white/80 font-semibold">
                     {displayCandle.volume.toLocaleString()}
                   </span>
                 </span>
               )}
             </>
           ) : (
-            <span className="text-zinc-400">Awaiting simulation data...</span>
+            <span className="text-white/40">Awaiting simulation data...</span>
           )}
         </div>
 
@@ -257,8 +257,8 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                 onClick={() => onToggleOverlay('fvg')}
                 className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all flex items-center gap-1 border ${
                   showFVGs
-                    ? 'bg-amber-100/80 text-amber-900 border-amber-300 font-semibold shadow-xs'
-                    : 'bg-white text-zinc-600 border-zinc-200 hover:text-zinc-900 hover:border-zinc-300'
+                    ? 'bg-amber-400/20 text-amber-300 border-amber-400/40 font-semibold shadow-xs'
+                    : 'bg-white/[0.03] text-white/50 border-white/[0.08] hover:text-white hover:border-white/20'
                 }`}
                 title="Toggle Fair Value Gaps"
               >
@@ -271,8 +271,8 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                 onClick={() => onToggleOverlay('ob')}
                 className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all flex items-center gap-1 border ${
                   showOrderBlocks
-                    ? 'bg-blue-100/80 text-blue-900 border-blue-300 font-semibold shadow-xs'
-                    : 'bg-white text-zinc-600 border-zinc-200 hover:text-zinc-900 hover:border-zinc-300'
+                    ? 'bg-purple-500/20 text-purple-300 border-purple-500/40 font-semibold shadow-xs'
+                    : 'bg-white/[0.03] text-white/50 border-white/[0.08] hover:text-white hover:border-white/20'
                 }`}
                 title="Toggle Order Blocks & Breakers"
               >
@@ -284,8 +284,8 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                 onClick={() => onToggleOverlay('ote')}
                 className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all flex items-center gap-1 border ${
                   showOTE
-                    ? 'bg-purple-100/80 text-purple-900 border-purple-300 font-semibold shadow-xs'
-                    : 'bg-white text-zinc-600 border-zinc-200 hover:text-zinc-900 hover:border-zinc-300'
+                    ? 'bg-amber-400/20 text-amber-300 border-amber-400/40 font-semibold shadow-xs'
+                    : 'bg-white/[0.03] text-white/50 border-white/[0.08] hover:text-white hover:border-white/20'
                 }`}
                 title="Toggle OTE Fibonacci Levels (0.62 - 0.705)"
               >
@@ -297,8 +297,8 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                 onClick={() => onToggleOverlay('benchmarks')}
                 className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all flex items-center gap-1 border ${
                   showBenchmarks
-                    ? 'bg-zinc-900 text-white border-zinc-900 font-semibold shadow-xs'
-                    : 'bg-white text-zinc-600 border-zinc-200 hover:text-zinc-900 hover:border-zinc-300'
+                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-semibold shadow-xs'
+                    : 'bg-white/[0.03] text-white/50 border-white/[0.08] hover:text-white hover:border-white/20'
                 }`}
                 title="Toggle Session Benchmarks (Asian High/Low, Midnight Open)"
               >
@@ -313,8 +313,8 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
               onClick={onToggleSecondarySeries}
               className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all flex items-center gap-1 ml-1 border ${
                 showSecondarySeries
-                  ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-semibold shadow-xs'
-                  : 'bg-white text-zinc-600 border-zinc-200 hover:text-zinc-900'
+                  ? 'bg-pink-500/20 text-pink-300 border-pink-500/40 font-semibold shadow-xs'
+                  : 'bg-white/[0.03] text-white/50 border-white/[0.08] hover:text-white hover:border-white/20'
               }`}
               title="Toggle Correlated ES / NQ SMT Comparison Series"
             >
@@ -388,14 +388,14 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                   y1={y}
                   x2={margin.left + innerWidth}
                   y2={y}
-                  stroke="#E2E8F0"
+                  stroke="rgba(255, 255, 255, 0.08)"
                   strokeWidth="0.8"
                   strokeDasharray="3 3"
                 />
                 <text
                   x={margin.left + innerWidth + 8}
                   y={y + 3.5}
-                  fill="#64748B"
+                  fill="rgba(255, 255, 255, 0.45)"
                   fontSize="9.5"
                   fontFamily="monospace"
                 >
@@ -416,14 +416,14 @@ export const CandlestickChart: React.FC<CandlestickChartProps> = ({
                     y1={margin.top}
                     x2={x}
                     y2={margin.top + innerHeight}
-                    stroke="#E2E8F0"
+                    stroke="rgba(255, 255, 255, 0.06)"
                     strokeWidth="0.6"
                     strokeDasharray="2 4"
                   />
                   <text
                     x={x}
                     y={margin.top + innerHeight + 16}
-                    fill="#64748B"
+                    fill="rgba(255, 255, 255, 0.45)"
                     fontSize="9"
                     fontFamily="monospace"
                     textAnchor="middle"

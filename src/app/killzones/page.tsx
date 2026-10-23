@@ -177,31 +177,31 @@ export default function KillzonesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBFBFC] text-zinc-900 flex flex-col antialiased selection:bg-amber-500/20 selection:text-zinc-900">
+    <div className="min-h-screen bg-[#0c0d0f] text-white flex flex-col antialiased selection:bg-amber-500/20 selection:text-white">
       <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-10">
         
         {/* Header & Live Clock */}
         <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-200 bg-white text-xs font-medium text-zinc-600 shadow-sm">
-            <Clock className="h-3.5 w-3.5 text-amber-500" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs font-mono font-medium text-white/60">
+            <Clock className="h-3.5 w-3.5 text-amber-400" />
             <span>Time & Price Algorithmic Architecture</span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
             <div>
-              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900">
+              <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white">
                 Killzones & Algorithmic Macros
               </h1>
-              <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-xl leading-relaxed">
+              <p className="text-sm sm:text-base text-white/50 mt-2 max-w-xl leading-relaxed">
                 Time trumps price. The algorithm deploys institutional orders strictly inside predetermined New York EST windows.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl border border-zinc-200 bg-white shadow-sm font-mono text-left sm:text-right shrink-0">
-              <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold">New York Time (EST)</div>
-              <div className="text-2xl font-bold text-zinc-900 mt-0.5">
+            <div className="p-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] font-mono text-left sm:text-right shrink-0">
+              <div className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">New York Time (EST)</div>
+              <div className="text-2xl font-bold text-white mt-0.5">
                 {timeString || "--:--:-- EST"}
               </div>
             </div>
@@ -210,26 +210,30 @@ export default function KillzonesPage() {
 
         {/* Next Macro Alert Banner */}
         {nextMacro && (
-          <div className="p-5 rounded-2xl border border-amber-200/90 bg-gradient-to-r from-amber-50/70 to-orange-50/40 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+          <div className={`p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs ${
+            minutesToNextMacro === 0 
+              ? "border-emerald-500/30 bg-emerald-950/20 text-emerald-200" 
+              : "border-amber-500/20 bg-amber-950/15 text-amber-200/90"
+          }`}>
             <div className="flex items-center gap-3.5">
-              <span className={`h-2.5 w-2.5 rounded-full ${minutesToNextMacro === 0 ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
+              <span className={`h-2.5 w-2.5 rounded-full ${minutesToNextMacro === 0 ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`} />
               <div>
-                <span className="font-bold text-zinc-900 text-sm">{nextMacro.name} ({nextMacro.time})</span>
-                <p className="text-zinc-600 mt-0.5 leading-relaxed">{nextMacro.description}</p>
+                <span className="font-semibold text-white text-sm">{nextMacro.name} ({nextMacro.time})</span>
+                <p className="text-white/60 mt-0.5 leading-relaxed">{nextMacro.description}</p>
               </div>
             </div>
             <div className="font-mono text-right shrink-0">
-              <span className="font-bold text-zinc-900 text-sm px-2.5 py-1 rounded-full bg-white border border-amber-200 shadow-xs">
+              <span className="font-bold text-white text-xs px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10">
                 {minutesToNextMacro === 0 ? "Active Now" : `In ${minutesToNextMacro}m`}
               </span>
-              <div className="text-[10px] text-zinc-500 mt-1 font-sans">{nextMacro.significance}</div>
+              <div className="text-[10px] text-white/40 mt-1 font-sans">{nextMacro.significance}</div>
             </div>
           </div>
         )}
 
         {/* 24-Hour Timeline Bar */}
         <div className="space-y-4">
-          <div className="text-xs font-mono text-zinc-400 uppercase tracking-widest font-semibold">
+          <div className="text-xs font-mono text-white/40 uppercase tracking-widest font-semibold">
             24-Hour Institutional Schedule
           </div>
 
@@ -244,20 +248,20 @@ export default function KillzonesPage() {
                   key={kz.name}
                   className={`p-4 rounded-2xl border transition-all ${
                     isActive
-                      ? "border-zinc-900 bg-zinc-900 text-white shadow-md"
-                      : "border-zinc-200 bg-white text-zinc-800 shadow-sm"
+                      ? "border-amber-500/40 bg-amber-500/[0.08] text-white shadow-lg shadow-amber-500/5 ring-1 ring-amber-500/20"
+                      : "border-white/[0.08] bg-white/[0.02] text-white/80 hover:border-white/20 hover:bg-white/[0.04]"
                   }`}
                 >
                   <div className={`text-[10px] font-mono font-bold uppercase ${
-                    isActive ? "text-emerald-400" : "text-zinc-400"
+                    isActive ? "text-amber-300" : "text-white/40"
                   }`}>
                     {isActive ? "● Active Now" : kz.time}
                   </div>
-                  <div className="font-medium text-xs mt-1">
+                  <div className="font-medium text-xs mt-1 text-white">
                     {kz.name}
                   </div>
                   <div className={`text-[11px] mt-1 line-clamp-2 ${
-                    isActive ? "text-zinc-300" : "text-zinc-500"
+                    isActive ? "text-white/80" : "text-white/50"
                   }`}>
                     {kz.role}
                   </div>
@@ -269,13 +273,13 @@ export default function KillzonesPage() {
 
         {/* Macros Table */}
         <div className="space-y-3">
-          <div className="text-xs font-mono text-zinc-500 uppercase tracking-widest">
+          <div className="text-xs font-mono text-white/40 uppercase tracking-widest font-semibold">
             20-Minute Algorithmic Macros
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white">
+          <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-white/[0.02]">
             <table className="w-full text-left text-xs font-mono">
-              <thead className="bg-zinc-50 text-zinc-500 border-b border-zinc-200 uppercase">
+              <thead className="bg-white/[0.03] text-white/50 border-b border-white/[0.08] uppercase text-[11px]">
                 <tr>
                   <th className="px-4 py-3 font-semibold">Window (EST)</th>
                   <th className="px-4 py-3 font-semibold">Macro Name</th>
@@ -283,24 +287,24 @@ export default function KillzonesPage() {
                   <th className="px-4 py-3 font-semibold">Role</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200">
+              <tbody className="divide-y divide-white/[0.06]">
                 {MACRO_WINDOWS.map((macro) => {
                   const isCurrent = totalCurrentMinutes >= macro.startMinutes && totalCurrentMinutes < macro.endMinutes;
                   return (
                     <tr 
                       key={macro.time} 
-                      className={isCurrent ? "bg-emerald-50 text-emerald-950 font-medium" : "hover:bg-zinc-50 text-zinc-800"}
+                      className={isCurrent ? "bg-emerald-500/[0.1] text-emerald-200 font-medium" : "hover:bg-white/[0.02] text-white/70"}
                     >
-                      <td className="px-4 py-3 whitespace-nowrap font-semibold">
+                      <td className="px-4 py-3 whitespace-nowrap font-semibold text-white/90">
                         {macro.time}
                       </td>
-                      <td className="px-4 py-3 text-zinc-900 font-semibold">
+                      <td className="px-4 py-3 text-white font-medium">
                         {macro.name}
                       </td>
-                      <td className="px-4 py-3 text-zinc-600 font-sans text-xs">
+                      <td className="px-4 py-3 text-white/60 font-sans text-xs">
                         {macro.description}
                       </td>
-                      <td className="px-4 py-3 text-zinc-600 whitespace-nowrap">
+                      <td className="px-4 py-3 text-white/50 whitespace-nowrap">
                         {macro.significance}
                       </td>
                     </tr>
@@ -314,7 +318,7 @@ export default function KillzonesPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200 py-8 text-xs font-mono text-zinc-500 bg-zinc-50">
+      <footer className="border-t border-white/[0.08] py-8 text-xs font-mono text-white/40 bg-transparent">
         <div className="max-w-5xl mx-auto px-6 flex items-center justify-between">
           <span>ICT Core — Killzones & Macros</span>
           <span>Next.js · TypeScript</span>

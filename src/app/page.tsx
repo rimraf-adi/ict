@@ -242,31 +242,116 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          EDITORIAL STATEMENTS — Hobbes Typography
+          THE PARADIGM SHIFT: RETAIL VS INSTITUTIONAL
       ═══════════════════════════════════════════════════ */}
-      <section className="py-28 md:py-36 relative overflow-hidden">
-        <div className="mx-auto max-w-4xl px-6 text-center space-y-12">
+      <section className="py-20 md:py-28 border-b border-white/[0.07] relative overflow-hidden bg-gradient-to-b from-white/[0.01] to-transparent">
+        <div className="mx-auto max-w-5xl px-6 space-y-12">
           
-          <div className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-wider text-white/40 border border-white/10 px-3.5 py-1 rounded-full bg-white/[0.02]">
-            The Algorithmic Reality
+          {/* Header */}
+          <div className="text-center space-y-4 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-wider text-amber-300/80 border border-amber-400/20 px-3.5 py-1 rounded-full bg-amber-400/5">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+              The Algorithmic Paradigm
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white leading-tight">
+              Retail traders study candles.<br />
+              Institutions <span className="text-amber-300">engineer</span> them.
+            </h2>
+            <p className="text-white/50 text-sm sm:text-base leading-relaxed">
+              Traditional chart patterns lag behind algorithmic order routing. Understanding institutional liquidity changes everything.
+            </p>
           </div>
 
-          <div className="space-y-6 max-w-3xl mx-auto">
-            <h2 className="text-3xl sm:text-5xl md:text-5xl font-semibold tracking-tight text-white leading-[1.18]">
-              Retail traders study candles and indicators.
-            </h2>
-            <h2 className="text-3xl sm:text-5xl md:text-5xl font-semibold tracking-tight text-white leading-[1.18]">
-              Institutions engineer the candles retail traders study.
-            </h2>
+          {/* Dual Comparative Bento Cards */}
+          <div className="grid md:grid-cols-2 gap-5">
+            
+            {/* Left Card: Retail Trap */}
+            <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-7 md:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden group hover:border-white/15 transition-all">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider font-semibold bg-rose-500/10 text-rose-300 border border-rose-500/20">
+                    Retail Assumption (95% Liquidity)
+                  </span>
+                  <span className="text-white/20 font-mono text-xs">01</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white/90">
+                  Trading Lagging Indicators & Patterns
+                </h3>
+                <p className="text-xs sm:text-sm text-white/50 leading-relaxed font-sans">
+                  Retail relies on moving average crossovers, RSI overbought zones, and static diagonal trendlines that central banks deliberately exploit.
+                </p>
+                <div className="space-y-2.5 pt-2 text-xs font-mono text-white/60">
+                  <div className="flex items-center gap-2">
+                    <span className="text-rose-400 font-bold">✕</span>
+                    <span>Buying double-bottom breakouts into resting sell stops</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-rose-400 font-bold">✕</span>
+                    <span>Treating trendlines as support instead of engineered liquidity</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-rose-400 font-bold">✕</span>
+                    <span>Placing obvious stop losses directly above swing extremes</span>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-white/[0.06] text-[11px] font-mono text-white/40">
+                Outcome: Engineered stop-runs and consistent slippage.
+              </div>
+            </div>
+
+            {/* Right Card: Institutional Reality */}
+            <div className="rounded-3xl border border-amber-400/30 bg-gradient-to-b from-amber-400/[0.04] to-transparent p-7 md:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden group hover:border-amber-400/50 transition-all shadow-xl shadow-amber-500/5">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider font-semibold bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                    Institutional Reality (IPDA Algorithm)
+                  </span>
+                  <span className="text-amber-400/40 font-mono text-xs">02</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Executing Liquidity Raids & FVGs
+                </h3>
+                <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-sans">
+                  The Interbank Price Delivery Algorithm delivers price strictly to purge resting stop clusters and rebalance institutional Fair Value Gaps.
+                </p>
+                <div className="space-y-2.5 pt-2 text-xs font-mono text-white/80">
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Raid buy-side / sell-side liquidity before trend expansion</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Enter discount Fair Value Gaps after confirmed Market Structure Shift</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span>
+                    <span>Execute strictly inside London & New York algorithmic Macro windows</span>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-amber-400/15 text-[11px] font-mono text-amber-300/80">
+                Outcome: High-probability asymmetric risk-to-reward delivery.
+              </div>
+            </div>
+
           </div>
 
-          <div className="space-y-4 max-w-2xl mx-auto pt-6 border-t border-white/[0.08]">
-            <p className="text-2xl sm:text-3xl font-normal tracking-tight text-white/35 leading-relaxed">
-              Traditional chart patterns lag price delivery.
-            </p>
-            <p className="text-2xl sm:text-3xl font-medium tracking-tight bg-gradient-to-r from-amber-200 via-orange-300 to-amber-400 bg-clip-text text-transparent leading-relaxed">
-              Understanding institutional liquidity changes everything.
-            </p>
+          {/* Unified Institutional Rule Strip */}
+          <div className="p-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div className="flex items-center gap-3">
+              <div className="h-2 w-2 rounded-full bg-amber-400 shrink-0" />
+              <span className="text-xs font-mono text-white/70">
+                <strong className="text-white">Core Axiom:</strong> Price does not move on retail volume. It moves to seek liquidity.
+              </span>
+            </div>
+            <Link 
+              href="/learn/foundations/what-is-smart-money-and-ipda"
+              className="text-xs font-mono text-amber-300 hover:text-amber-200 flex items-center gap-1 shrink-0 transition-colors"
+            >
+              <span>Explore IPDA Mechanics</span>
+              <span>→</span>
+            </Link>
           </div>
 
         </div>

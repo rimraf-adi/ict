@@ -9,7 +9,7 @@ import { LightweightMiniChart } from "@/components/charts/LightweightMiniChart";
 /* ─── Main ───────────────────────────────────────────────── */
 export default function HomePage() {
   const [activeStep, setActiveStep] = useState(0);
-  const [openTier, setOpenTier] = useState<string>("foundations");
+  const [openTier, setOpenTier] = useState<string>("");
 
   const curriculumTiers = [
     {

@@ -350,9 +350,9 @@ export const FOUNDATIONS_MODULES: Record<string, ModuleContent> = {
         ],
         "numberedSteps": [],
         "diagram": {
-          "type": "market-structure",
-          "title": "Market Structure: BOS vs. Market Structure Shift (MSS)",
-          "caption": "A true MSS requires full candle body closure beyond a significant swing point, confirming institutional order flow reversal."
+          "type": "fvg",
+          "title": "Fair Value Gap (BISI/SIBI) 3-Candle Anatomy",
+          "caption": "Open void between Candle 1 and Candle 3 with 50% Consequent Encroachment (CE)."
         }
       },
       {

@@ -4,60 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import { ArrowRight, Check, ChevronDown, BookOpen, Clock } from "lucide-react";
-
-/* ─── Inline MiniChart ──────────────────────────────────── */
-function MiniChart({ theme = "dark" }: { theme?: "dark" | "light" }) {
-  const bg = theme === "dark" ? "#111214" : "#f8f7f5";
-  const grid = theme === "dark" ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.06)";
-  const textCol = theme === "dark" ? "#4b5563" : "#9ca3af";
-  const candles = [
-    { x: 26,  o: 160, c: 140, h: 165, l: 135 },
-    { x: 58,  o: 142, c: 155, h: 160, l: 138 },
-    { x: 90,  o: 153, c: 138, h: 158, l: 132 },
-    { x: 122, o: 140, c: 122, h: 145, l: 118 }, // judas wick
-    { x: 154, o: 124, c: 138, h: 142, l: 120 }, // reversal
-    { x: 186, o: 136, c: 152, h: 156, l: 134 },
-    { x: 218, o: 150, c: 165, h: 169, l: 148 },
-    { x: 250, o: 163, c: 178, h: 182, l: 161 },
-    { x: 282, o: 176, c: 190, h: 194, l: 174 },
-  ];
-  return (
-    <svg viewBox="0 0 340 220" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="340" height="220" fill={bg} rx="12" />
-      {/* Grid */}
-      {[60,100,140,180].map(y => (
-        <line key={y} x1="16" y1={y} x2="324" y2={y} stroke={grid} strokeWidth="1" />
-      ))}
-      {/* BSL sweep level */}
-      <line x1="20" y1="130" x2="160" y2="130" stroke="#f43f5e" strokeWidth="0.8" strokeDasharray="3 3" />
-      <text x="22" y="127" fontSize="8" fill="#f43f5e" fontFamily="monospace" opacity="0.8">BSL</text>
-      {/* FVG box */}
-      <rect x="144" y="130" width="50" height="22" fill="#3b82f6" fillOpacity="0.15" />
-      <line x1="144" y1="141" x2="194" y2="141" stroke="#3b82f6" strokeWidth="0.8" strokeDasharray="2 2" />
-      <text x="148" y="128" fontSize="7.5" fill="#60a5fa" fontFamily="monospace">FVG</text>
-      {/* TP */}
-      <line x1="194" y1="82" x2="324" y2="82" stroke="#10b981" strokeWidth="0.8" strokeDasharray="3 3" />
-      <text x="198" y="79" fontSize="7.5" fill="#10b981" fontFamily="monospace">TP +24p</text>
-      {/* Candles */}
-      {candles.map((c, i) => {
-        const bull = c.c > c.o;
-        const col = i === 3 ? "#f43f5e" : (bull ? "#10b981" : "#f43f5e");
-        return (
-          <g key={i}>
-            <line x1={c.x + 14} y1={c.h} x2={c.x + 14} y2={c.l} stroke={col} strokeWidth="1.2" />
-            <rect x={c.x} y={Math.min(c.o, c.c)} width="28" height={Math.max(Math.abs(c.o - c.c), 3)} rx="2" fill={col} />
-          </g>
-        );
-      })}
-      {/* Entry dot */}
-      <circle cx="168" cy="141" r="4" fill="#60a5fa" />
-      <circle cx="168" cy="141" r="8" stroke="#60a5fa" strokeWidth="1" opacity="0.4" />
-      {/* Price labels */}
-      <text x="296" y="135" fontSize="8" fill={textCol} fontFamily="monospace">1.0842</text>
-      <text x="296" y="85" fontSize="8" fill="#10b981" fontFamily="monospace">1.0866</text>
-    </svg>
-  );
-}
+import { LightweightMiniChart } from "@/components/charts/LightweightMiniChart";
 
 /* ─── Main ───────────────────────────────────────────────── */
 export default function HomePage() {
@@ -421,8 +368,8 @@ export default function HomePage() {
                 </div>
 
                 {/* Chart */}
-                <div className="h-[200px] sm:h-[240px]">
-                  <MiniChart theme="dark" />
+                <div className="h-[300px]">
+                  <LightweightMiniChart theme="dark" height={300} />
                 </div>
 
                 {/* Telemetry */}
